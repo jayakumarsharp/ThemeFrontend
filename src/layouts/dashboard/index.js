@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
@@ -35,13 +19,50 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { useAuth } from "hooks/useAuth";
+import Quotes from "components/quote/Quotes";
+import TrendingSymbols from "components/home/TrendingSymbols";
+import PortfolioSummary from "components/home/PortfolioSummary";
+
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
-
+  const { currentUser } = useAuth();
+  console.log(currentUser);
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}>
+      <h1>Summary</h1>
+      {currentUser && (
+        <Grid md="7">
+          <PortfolioSummary />
+        </Grid>
+      )}
+
+      <Grid md={currentUser ? 5 : 12}>
+        <Quotes
+          label="US Markets"
+          symbols={["^GSPC", "^DJI", "^IXIC", "^RUT"]}
+          showSymbol={false}
+          showName={true}
+        />
+        <Quotes
+          label="Crytocurrencies"
+          symbols={["BTC-USD", "ETH-USD"]}
+          showSymbol={false}
+          showName={true}
+        />
+        {currentUser && (
+          <Quotes
+            label="Watchlist"
+            symbols={currentUser?.watchlist}
+            showSymbol={true}
+            showName={true}
+          />
+        )}
+        <TrendingSymbols />
+      </Grid>
+
+      {/* <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -154,7 +175,7 @@ function Dashboard() {
             </Grid>
           </Grid>
         </MDBox>
-      </MDBox>
+      </MDBox> */}
       <Footer />
     </DashboardLayout>
   );

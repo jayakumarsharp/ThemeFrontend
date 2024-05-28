@@ -83,6 +83,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setCurrentUser(null);
     setToken(null);
+    return { success: true };
   };
 
   //if (!isLoading) return <LoadingSpinner />;

@@ -1,0 +1,130 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+  }
+  
+  header {
+    background-color: #007bff;
+    padding: 1rem 0;
+    color: white;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+  
+  nav ul li {
+    margin: 0 1rem;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+  
+  /* Hero section */
+  .hero {
+    background: url('https://via.placeholder.com/1500x500') no-repeat center center/cover;
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  
+  .hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Features section */
+  .features {
+    background-color: #fff;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .features h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .features ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .features ul li {
+    background-color: #f9f9f9;
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+  
+  /* Testimonial section */
+  .testimonial {
+    background-color: #e9ecef;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .testimonial h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .testimonial p {
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+  
+  /* Button styles */
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  

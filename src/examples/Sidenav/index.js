@@ -12,7 +12,7 @@ import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 import { useAuth } from "hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
 import {
   useMaterialUIController,
   setMiniSidenav,
@@ -26,7 +26,21 @@ function Sidenav({ color = "info", brand = "", brandName = "", routes = [], ...r
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
   const { currentUser, logout } = useAuth();
-
+  const navigate = useNavigate();
+  const handleLogout =  () => {
+    try {
+      debugger
+      let result =  logout();
+      
+      if (result.success) {
+        navigate("/authentication/sign-in");
+      } else {
+        alert("Login failed");
+      }
+    } catch (error) {
+      alert("Logout failed");
+    }
+  };
 
   let textColor = "white";
 
@@ -147,7 +161,7 @@ function Sidenav({ color = "info", brand = "", brandName = "", routes = [], ...r
       <MDBox p={2} mt="auto">
         <MDButton
           component="a"
-          onClick={logout}
+          onClick={handleLogout}
           to='/authentication/sign-in'
           target="_blank"
           rel="noreferrer"
