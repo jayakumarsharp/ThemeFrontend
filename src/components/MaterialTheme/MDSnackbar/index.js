@@ -24,11 +24,11 @@ import Divider from "@mui/material/Divider";
 import Fade from "@mui/material/Fade";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
 
 // Custom styles for the MDSnackbar
-import MDSnackbarIconRoot from "components/MDSnackbar/MDSnackbarIconRoot";
+import MDSnackbarIconRoot from "components/MaterialTheme/MDSnackbar/MDSnackbarIconRoot";
 
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";

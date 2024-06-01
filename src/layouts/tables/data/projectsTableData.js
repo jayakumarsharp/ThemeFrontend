@@ -2,10 +2,10 @@
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
-import MDProgress from "components/MDProgress";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
+import MDAvatar from "components/MaterialTheme/MDAvatar";
+import MDProgress from "components/MaterialTheme/MDProgress";
 
 // Images
 import LogoAsana from "assets/images/small-logos/logo-asana.svg";

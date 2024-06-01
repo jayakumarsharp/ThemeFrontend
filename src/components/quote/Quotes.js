@@ -11,8 +11,8 @@ import Card from "@mui/material/Card";
 import MuiLink from "@mui/material/Link";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 
 const Quotes = ({ label, headerLink, symbols, showSymbol, showName }) => {

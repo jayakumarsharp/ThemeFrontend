@@ -37,9 +37,9 @@ import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDProgress from "components/MDProgress";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
+import MDProgress from "components/MaterialTheme/MDProgress";
 
 // ProgressLineChart configurations
 import configs from "examples/Charts/LineCharts/ProgressLineChart/config";

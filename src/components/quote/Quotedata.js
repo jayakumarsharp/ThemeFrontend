@@ -1,8 +1,8 @@
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
-import MDBadge from "components/MDBadge";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
+import MDAvatar from "components/MaterialTheme/MDAvatar";
+import MDBadge from "components/MaterialTheme/MDBadge";
 
 const Quotedata = ({ data }) => {
   debugger;

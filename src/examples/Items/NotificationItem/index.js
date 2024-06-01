@@ -23,8 +23,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "@mui/material/Link";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
 
 // custom styles for the NotificationItem
 import menuItem from "examples/Items/NotificationItem/styles";

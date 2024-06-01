@@ -20,8 +20,8 @@ import PropTypes from "prop-types";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDTypography from "components/MaterialTheme/MDTypography";
 
 function Invoice({ date, id, price, noGutter }) {
   return (

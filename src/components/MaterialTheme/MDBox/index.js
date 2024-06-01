@@ -18,41 +18,39 @@ import { forwardRef } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
-import MDTypography from "components/MDTypography";
+// Custom styles for MDBox
+import MDBoxRoot from "components/MaterialTheme/MDBox/MDBoxRoot";
 
-// Custom styles for MDProgress
-import MDProgressRoot from "components/MDProgress/MDProgressRoot";
-
-const MDProgress = forwardRef(({ variant, color, value, label, ...rest }, ref) => (
-  <>
-    {label && (
-      <MDTypography variant="button" fontWeight="medium" color="text">
-        {value}%
-      </MDTypography>
-    )}
-    <MDProgressRoot
+const MDBox = forwardRef(
+  ({ variant, bgColor, color, opacity, borderRadius, shadow, coloredShadow, ...rest }, ref) => (
+    <MDBoxRoot
       {...rest}
       ref={ref}
-      variant="determinate"
-      value={value}
-      ownerState={{ color, value, variant }}
+      ownerState={{ variant, bgColor, color, opacity, borderRadius, shadow, coloredShadow }}
     />
-  </>
-));
+  )
+);
 
-// Setting default values for the props of MDProgress
-MDProgress.defaultProps = {
+// Setting default values for the props of MDBox
+MDBox.defaultProps = {
   variant: "contained",
-  color: "info",
-  value: 0,
-  label: false,
+  bgColor: "transparent",
+  color: "dark",
+  opacity: 1,
+  borderRadius: "none",
+  shadow: "none",
+  coloredShadow: "none",
 };
 
-// Typechecking props for the MDProgress
-MDProgress.propTypes = {
+// Typechecking props for the MDBox
+MDBox.propTypes = {
   variant: PropTypes.oneOf(["contained", "gradient"]),
-  color: PropTypes.oneOf([
+  bgColor: PropTypes.string,
+  color: PropTypes.string,
+  opacity: PropTypes.number,
+  borderRadius: PropTypes.string,
+  shadow: PropTypes.string,
+  coloredShadow: PropTypes.oneOf([
     "primary",
     "secondary",
     "info",
@@ -61,9 +59,8 @@ MDProgress.propTypes = {
     "error",
     "light",
     "dark",
+    "none",
   ]),
-  value: PropTypes.number,
-  label: PropTypes.bool,
 };
 
-export default MDProgress;
+export default MDBox;

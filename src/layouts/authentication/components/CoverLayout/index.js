@@ -20,8 +20,8 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-// import MDTypography from "components/MDTypography";
+import MDBox from "components/MaterialTheme/MDBox";
+// import MDTypography from "components/MaterialTheme/MDTypography";
 
 // Material Dashboard 2 React example components
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";

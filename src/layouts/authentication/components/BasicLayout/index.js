@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
+import MDBox from "components/MaterialTheme/MDBox";
 
 // Material Dashboard 2 React example components
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
