@@ -1,14 +1,10 @@
 // Material Dashboard 2 React components
-import MDBox from "components/MaterialTheme/MDBox";
 import MDTypography from "components/MaterialTheme/MDTypography";
-import MDAvatar from "components/MaterialTheme/MDAvatar";
-import MDBadge from "components/MaterialTheme/MDBadge";
 
 const Quotedata = ({ data }) => {
-  debugger;
   const { data: dataArray } = data;
   const columns = [
-    { Header: "symbol", accessor: "symbol", width: "45%", align: "left" },
+    { Header: "symbol", accessor: "symbol", align: "left" },
     { Header: "shortName", accessor: "shortName", align: "left" },
     { Header: "regularMarketPrice", accessor: "regularMarketChange", align: "center" },
     {
