@@ -1,6 +1,5 @@
 import { Grid, Container, Typography, Box } from "@mui/material";
 import { useAuth } from "../../hooks/useAuth";
-import Quotes from "../quote/Quotes";
 import TrendingSymbols from "./TrendingSymbols";
 import PortfolioSummary from "./PortfolioSummary";
 

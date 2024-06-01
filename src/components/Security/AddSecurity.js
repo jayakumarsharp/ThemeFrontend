@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+
 import axiosClient from '../axios'
 
 const AddSecurityForm = () => {

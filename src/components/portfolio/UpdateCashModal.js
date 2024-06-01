@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, TextField, InputAdornment, Button, Modal, Typography, Alert } from '@mui/material';
 import { useForm } from '../../hooks/useForm';
-import { useTheme } from '@mui/material/styles';
 
 const UpdateCashModal = ({ showModal, handleClose, handleEdit, portfolio }) => {
   const { formData, formErrors, formSuccess, handleChange, handleSubmit } = useForm(
@@ -27,7 +26,7 @@ const UpdateCashModal = ({ showModal, handleClose, handleEdit, portfolio }) => {
     >
       <Box
         component="form"
-        onSubmit={handleSubmit}
+       
         sx={{
           position: 'absolute',
           top: '50%',
@@ -72,7 +71,7 @@ const UpdateCashModal = ({ showModal, handleClose, handleEdit, portfolio }) => {
           </Alert>
         ) : null}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" onClick={handleSubmit} variant="contained" color="primary">
             Update
           </Button>
           <Button onClick={handleClose} variant="outlined" color="secondary">

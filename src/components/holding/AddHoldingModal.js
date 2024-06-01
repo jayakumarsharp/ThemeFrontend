@@ -68,7 +68,7 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
             </Alert>
           ) : null}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" onClick={handleSubmit} color="primary">
               Add
             </Button>
             <Button onClick={handleClose} variant="outlined" color="secondary">

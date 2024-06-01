@@ -124,7 +124,7 @@ const routes = [
     name: "analytics",
     key: "analytics",
     icon: <Icon fontSize="small">Analytics </Icon>,
-    route: "/dataimport",
+    route: "/analytics",
     component: <AnalyticsComponent />,
   },
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, Button, Typography } from '@mui/material'; // Import necessary Material-UI components
+import { FormControl, Button, Typography, TextField, Box } from '@mui/material'; // Import necessary Material-UI components
 import { useForm } from '../../hooks/useForm';
 import Alert from '../common/Alert';
 
@@ -15,26 +15,34 @@ const Notes = ({ handleEdit, portfolio }) => {
   const { notes } = formData;
 
   return (
-    <form onSubmit={handleSubmit}> 
-      <FormControl fullWidth sx={{ mb: 3 }}> 
-        <Typography variant="h6" gutterBottom>Notes</Typography> 
-        <textarea
-          rows={3}
-          placeholder="Notes"
-          name="notes"
-          value={notes}
-          onChange={handleChange}
-          style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ced4da' }}
-        />
-      </FormControl>
-      {formErrors.length ? (
+    <form onSubmit={handleSubmit}>
+    <FormControl fullWidth sx={{ mb: 3 }}>
+      <Typography variant="h6" gutterBottom>Notes</Typography>
+      <TextField
+        multiline
+        rows={3}
+        placeholder="Notes"
+        name="notes"
+        value={notes}
+        onChange={handleChange}
+        variant="outlined"
+        fullWidth
+      />
+    </FormControl>
+    {formErrors.length > 0 && (
+      <Box mb={3}>
         <Alert type="danger" messages={formErrors} />
-      ) : null}
-      {formSuccess ? ( 
+      </Box>
+    )}
+    {formSuccess && (
+      <Box mb={3}>
         <Alert type="success" messages={["Updated successfully."]} />
-      ) : null}
-      <Button type="submit" variant="contained" color="primary">Save Notes</Button> {/* Material-UI Button */}
-    </form>
+      </Box>
+    )}
+    <Button type="submit" variant="contained" color="primary">
+      Save Notes
+    </Button>
+  </form>
   );
 }
 

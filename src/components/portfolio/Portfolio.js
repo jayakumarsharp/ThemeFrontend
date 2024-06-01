@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import {  Table, Button } from "@mui/material";
+import { Table, Button } from "@mui/material";
 import { useAuth } from "hooks/useAuth";
 import PortfolioApi from "../../api/api";
 import DeletePortfolioModal from "./DeletePortfolioModal";
 import EditNameModal from "./EditNameModal";
-import Notes from "./Notes";
+//import Notes from "./Notes";
 import Holdings from "../holding/Holdings";
 import UpdateCashModal from "./UpdateCashModal";
 import { toDecimalHundredths } from "../../helpers/formatter";
 import "./Portfolio.css";
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
 
+// Material Dashboard 2 React components
+import MDBox from "components/MDBox";
 const Portfolio = () => {
   const { currentUser, refresh } = useAuth();
   const { go } = useNavigate();
@@ -93,107 +99,119 @@ const Portfolio = () => {
   };
 
   return (
-    <div>
-      <h1>{portfolio ? portfolio.name : "Invalid Portfolio..."}</h1>
-      {portfolio && (
-        <>
-          <h6>
-            <span>
-              <Button className="edit" onClick={handleEditNamePopup} /> Edit portfolio name
-            </span>
-            <span className="ms-3">
-              <Button className="trash" onClick={handleDeleteWarning} /> Delete portfolio
-            </span>
-          </h6>
-          <Holdings
-            holdings={displayObject}
-            setHoldings={setHoldings}
-            portfolio_id={portfolio?.id}
-          />
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="headerTitle">Cash</th>
-                <th className="headerMarketPrice"></th>
-                <th className="headerMarketPrice"></th>
-                <th className="headerMarketChange"></th>
-                <th className="headerMarketChange"></th>
-                {/* <th className="headerMarketChange"></th> */}
-                {/* <th className="headerMarketChange"></th> */}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="shortName"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketChange"></td>
-                <td className="regularMarketChange">{portfolio?.cash}</td>
-                {/* <td className="regularMarketChange"></td> */}
-                {/* <td className="regularMarketChange"></td> */}
-              </tr>
-              <tr>
-                <td className="shortName"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketChange"></td>
-                <td className="regularMarketChange">
-                  <Link to="#" onClick={handleEditCashPopup}>
-                    Update Cash
+    <DashboardLayout>
+      <DashboardNavbar />
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <h1>{portfolio ? portfolio.name : "Invalid Portfolio..."}</h1>
+            {portfolio && (
+              <>
+                <h6>
+                  <Link to="#" onClick={handleEditNamePopup}>
+                    Edit portfolio name
                   </Link>
-                </td>
-                {/* <td className="regularMarketChange"></td> */}
-                {/* <td className="regularMarketChange"></td> */}
-              </tr>
-            </tbody>
-          </Table>
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="headerTitle">Total Value</th>
-                <th className="headerMarketPrice"></th>
-                <th className="headerMarketPrice"></th>
-                <th className="headerMarketChange"></th>
-                <th className="headerMarketChange"></th>
-                {/* <th className="headerMarketChange"></th> */}
-                {/* <th className="headerMarketChange"></th> */}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="shortName"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketPrice"></td>
-                <td className="regularMarketChange"></td>
-                <td className="regularMarketChange">
-                  {toDecimalHundredths(totalValue + Number(portfolio?.cash))}
-                </td>
-                {/* <td className="regularMarketChange"></td> */}
-                {/* <td className="regularMarketChange"></td> */}
-              </tr>
-            </tbody>
-          </Table>
-          <Notes handleEdit={handleEditPortfolio} portfolio={portfolio} />
-          <DeletePortfolioModal
-            id={id}
-            showModal={showDeleteModal}
-            handleClose={handleCloseDeleteModal}
-          />
-          <EditNameModal
-            showModal={showEditNameModal}
-            handleClose={handleCloseEditNameModal}
-            handleEdit={handleEditPortfolio}
-            portfolio={portfolio}
-          />
-          <UpdateCashModal
-            showModal={showEditCashModal}
-            handleClose={handleCloseEditCashModal}
-            handleEdit={handleEditPortfolio}
-            portfolio={portfolio}
-          />
-        </>
-      )}
-    </div>
+                  <span>
+                    <Button type="button" className="edit" onClick={handleEditNamePopup} /> Edit
+                    portfolio name
+                  </span>
+                  <span className="ms-3">
+                    <Button type="button" className="trash" onClick={handleDeleteWarning} /> Delete
+                    portfolio
+                  </span>
+                </h6>
+                <Holdings
+                  holdings={displayObject}
+                  setHoldings={setHoldings}
+                  portfolio_id={portfolio?.id}
+                />
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th className="headerTitle">Cash</th>
+                      <th className="headerMarketPrice"></th>
+                      <th className="headerMarketPrice"></th>
+                      <th className="headerMarketChange"></th>
+                      <th className="headerMarketChange"></th>
+                      {/* <th className="headerMarketChange"></th> */}
+                      {/* <th className="headerMarketChange"></th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="shortName"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketChange"></td>
+                      <td className="regularMarketChange">{portfolio?.cash}</td>
+                      {/* <td className="regularMarketChange"></td> */}
+                      {/* <td className="regularMarketChange"></td> */}
+                    </tr>
+                    <tr>
+                      <td className="shortName"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketChange"></td>
+                      <td className="regularMarketChange">
+                        <Link to="#" onClick={handleEditCashPopup}>
+                          Update Cash
+                        </Link>
+                      </td>
+                      {/* <td className="regularMarketChange"></td> */}
+                      {/* <td className="regularMarketChange"></td> */}
+                    </tr>
+                  </tbody>
+                </Table>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th className="headerTitle">Total Value</th>
+                      <th className="headerMarketPrice"></th>
+                      <th className="headerMarketPrice"></th>
+                      <th className="headerMarketChange"></th>
+                      <th className="headerMarketChange"></th>
+                      {/* <th className="headerMarketChange"></th> */}
+                      {/* <th className="headerMarketChange"></th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="shortName"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketPrice"></td>
+                      <td className="regularMarketChange"></td>
+                      <td className="regularMarketChange">
+                        {toDecimalHundredths(totalValue + Number(portfolio?.cash))}
+                      </td>
+                      {/* <td className="regularMarketChange"></td> */}
+                      {/* <td className="regularMarketChange"></td> */}
+                    </tr>
+                  </tbody>
+                </Table>
+                {/* <Notes handleEdit={handleEditPortfolio} portfolio={portfolio} /> */}
+                {/* <DeletePortfolioModal
+              id={id}
+              showModal={showDeleteModal}
+              handleClose={handleCloseDeleteModal}
+            /> */}
+                <EditNameModal
+                  showModal={showEditNameModal}
+                  handleClose={handleCloseEditNameModal}
+                  handleEdit={handleEditPortfolio}
+                  portfolio={portfolio}
+                />
+                <UpdateCashModal
+                  showModal={showEditCashModal}
+                  handleClose={handleCloseEditCashModal}
+                  handleEdit={handleEditPortfolio}
+                  portfolio={portfolio}
+                />
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </MDBox>
+    </DashboardLayout>
   );
 };
 

@@ -7,9 +7,6 @@ import MDBox from "components/MDBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
 import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
@@ -31,14 +28,13 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <h1>Summary</h1>
-      {currentUser && (
-        <Grid md="7">
-          <PortfolioSummary />
-        </Grid>
-      )}
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <h2>Summary</h2>
+            {currentUser && <PortfolioSummary />}
 
-      <Grid md={currentUser ? 5 : 12}>
+            {/* <Grid md={currentUser ? 5 : 12}>
         <Quotes
           label="US Markets"
           symbols={["^GSPC", "^DJI", "^IXIC", "^RUT"]}
@@ -59,10 +55,9 @@ function Dashboard() {
             showName={true}
           />
         )}
-        <TrendingSymbols />
+  
       </Grid>
-
-      {/* <MDBox py={3}>
+     <TrendingSymbols /> <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -176,6 +171,9 @@ function Dashboard() {
           </Grid>
         </MDBox>
       </MDBox> */}
+          </Grid>
+        </Grid>
+      </MDBox>
       <Footer />
     </DashboardLayout>
   );

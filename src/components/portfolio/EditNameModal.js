@@ -1,7 +1,13 @@
 import React from "react";
-import { FormControl, Button, Modal } from '@mui/material';
+import { FormControl, Button, Modal,Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,TextField } from '@mui/material';
 import { useForm } from '../../hooks/useForm';
 import Alert from '../common/Alert'
+
+
+
 
 const EditNameModal = ({ showModal, handleClose, handleEdit, portfolio }) => {
   const { formData, formErrors, formSuccess, handleChange, handleSubmit } = useForm(
@@ -15,28 +21,42 @@ const EditNameModal = ({ showModal, handleClose, handleEdit, portfolio }) => {
 
   return (
     <Modal show={showModal} onHide={handleClose}>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit portfolio name</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label>Portfolio Name</Form.Label>
-            <Form.Control type="text" placeholder="Portfolio name" name="name" value={name} onChange={handleChange} />
-            <Form.Text muted>Name should be unique.</Form.Text>
-          </Form.Group>
-          {formErrors.length
-            ? <Alert type="danger" messages={formErrors} />
-            : null}
-          {formSuccess
-            ? <Alert type="success" messages={["Updated successfully."]} />
-            : null}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="submit">Update</Button>
-          <Button onClick={handleClose}>Cancel</Button>
-        </Modal.Footer>
-      </Form>
+      <form onSubmit={handleSubmit}>
+        <DialogTitle>Edit Portfolio Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Portfolio Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={name}
+            onChange={handleChange}
+          />
+          <small style={{ color: '#888' }}>Name should be unique.</small>
+          {formErrors.length > 0 && (
+            <Alert severity="error" style={{ marginTop: 10 }}>
+              {formErrors.map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </Alert>
+          )}
+          {formSuccess && (
+            <Alert severity="success" style={{ marginTop: 10 }}>
+              <p>Updated successfully.</p>
+            </Alert>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit" color="primary">
+            Update
+          </Button>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </form>
     </Modal>
   )
 }

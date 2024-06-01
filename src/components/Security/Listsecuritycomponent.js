@@ -6,6 +6,8 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { Link } from 'react-router-dom';
 import axiosClient from '../axios'
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 const SecurityComponent = () => {
   const [rowData, setRowData] = useState([]);
@@ -57,7 +59,8 @@ const SecurityComponent = () => {
   };
 
   return (
-
+    <DashboardLayout>
+    <DashboardNavbar />
     <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
       <Link to="/addsecurity">Add New Security</Link>
       <AgGridReact
@@ -78,6 +81,7 @@ const SecurityComponent = () => {
         frameworkComponents={{}}
       ></AgGridReact>
     </div>
+    </DashboardLayout>
   );
 };
 

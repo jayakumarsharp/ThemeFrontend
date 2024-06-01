@@ -21,7 +21,7 @@ const EditHoldingModal = ({ showModal, handleClose, handleEdit, handleDelete, ho
 
   return (
     <Modal show={showModal} onHide={handleClose}>
-      <Form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Holding</Modal.Title>
         </Modal.Header>
@@ -42,7 +42,7 @@ const EditHoldingModal = ({ showModal, handleClose, handleEdit, handleDelete, ho
           <Button onClick={handleClose}>Cancel</Button>
           <Button variant="danger" onClick={() => handleDelete(holding.id)}>Delete</Button>
         </Modal.Footer>
-      </Form>
+      </form>
     </Modal>
   )
 }
