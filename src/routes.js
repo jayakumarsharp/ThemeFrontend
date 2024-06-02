@@ -126,7 +126,7 @@ const routes = [
     name: "detailed",
     key: "detailed",
     icon: <Icon fontSize="small">detailed </Icon>,
-    route: "/dataimport",
+    route: "/detailed",
     component: <QuoteDetailed />,
   },
 ];

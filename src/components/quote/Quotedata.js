@@ -6,7 +6,7 @@ const Quotedata = ({ data }) => {
   const columns = [
     { Header: "symbol", accessor: "symbol", align: "left" },
     { Header: "shortName", accessor: "shortName", align: "left" },
-    { Header: "regularMarketPrice", accessor: "regularMarketChange", align: "center" },
+    { Header: "regularMarketPrice", accessor: "regularMarketPrice", align: "center" },
     {
       Header: "regularMarketChangePercent",
       accessor: "regularMarketChangePercent",
@@ -14,9 +14,9 @@ const Quotedata = ({ data }) => {
     },
     { Header: "action", accessor: "action", align: "center" },
   ];
-
+  console.log("quote data");
+  console.log(data);
   const rows = data.map((item) => ({
-    
     symbol: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
         {item.symbol}

@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 import PortfolioApi from "../../api/api";
-import { Button } from "@mui/material";
+import MDBox from "components/MaterialTheme/MDBox";
+import MDButton from "components/MaterialTheme/MDButton";
 const Star = ({ symbol }) => {
   const { currentUser, refresh } = useAuth();
 
@@ -24,11 +25,20 @@ const Star = ({ symbol }) => {
     <>
       {currentUser?.watchlist?.includes(symbol) ? (
         <>
-          <Button onClick={() => handleClick("remove")} /> Remove from watchlist
+          <MDButton
+            variant="gradient"
+            color="warning"
+            onClick={() => handleClick("remove")}
+            fullWidth
+          >
+            Remove from watchlist
+          </MDButton>
         </>
       ) : (
         <>
-          <Button onClick={() => handleClick("add")} /> Add to watchlist
+          <MDButton variant="gradient" color="success" onClick={() => handleClick("add")} fullWidth>
+            Add to watchlist
+          </MDButton>
         </>
       )}
     </>

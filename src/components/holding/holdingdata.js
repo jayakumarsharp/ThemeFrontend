@@ -1,6 +1,7 @@
 // Material Dashboard 2 React components
 import MDTypography from "components/MaterialTheme/MDTypography";
 import { debug } from "util";
+import { Link, useNavigate } from "react-router-dom";
 
 const Holdingdata = ({ holdings }) => {
   const columns = [
@@ -23,9 +24,11 @@ const Holdingdata = ({ holdings }) => {
 
   const rows = holdings.map((item) => ({
     symbol: (
-      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-        {item.symbol}
-      </MDTypography>
+      <Link className="symbolLink" to={`/detailed?symbol=${item.symbol}`}>
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          {item.symbol}
+        </MDTypography>
+      </Link>
     ),
     shortName: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
