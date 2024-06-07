@@ -27,7 +27,7 @@ const HomePageComponent = () => {
   const columnDefs = [
     { headerName: "ID", field: "id" },
     { headerName: "Name", field: "name" },
-    { headerName: "Age", field: "age" },
+    { headerName: "Price", field: "age" },
   ];
 
   return (
@@ -36,6 +36,7 @@ const HomePageComponent = () => {
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact columnDefs={columnDefs} rowData={rowData} />
       </div>
+      
     </DashboardLayout>
   );
 };

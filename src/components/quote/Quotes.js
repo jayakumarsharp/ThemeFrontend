@@ -7,9 +7,6 @@ import { toDecimalHundredths } from "../../helpers/formatter";
 import Quotedata from "./Quotedata";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-
-import MuiLink from "@mui/material/Link";
-
 // Material Dashboard 2 React components
 import MDBox from "components/MaterialTheme/MDBox";
 import MDTypography from "components/MaterialTheme/MDTypography";

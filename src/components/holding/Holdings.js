@@ -24,15 +24,16 @@ const Holdings = ({ holdings, portfolio_id }) => {
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const isMountedRef = useIsMountedRef();
+
   useEffect(() => {
     if (holdings.length > 0) {
       const result = Holdingdata({ holdings });
-      debugger;
       console.log(result);
       setColumns(result.columns);
       setRows(result.rows);
     }
   }, [holdings, isMountedRef]);
+  
   const handleEditHoldingPopup = (id) => {
     if (id) {
       setSelectedHolding(holdings.find((h) => h.id === id));

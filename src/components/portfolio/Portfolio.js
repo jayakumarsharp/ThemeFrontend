@@ -17,7 +17,6 @@ import Card from "@mui/material/Card";
 import MDTypography from "components/MaterialTheme/MDTypography";
 import MDButton from "components/MaterialTheme/MDButton";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MaterialTheme/MDBox";
 const Portfolio = () => {
   const { currentUser, refresh } = useAuth();
@@ -103,8 +102,8 @@ const Portfolio = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
-        <Grid container spacing={6}>
+      <MDBox pt={2} pb={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Grid container justifyContent="center">
               <MDTypography variant="h2" fontWeight="bold" textTransform="capitalize">
@@ -114,7 +113,7 @@ const Portfolio = () => {
             {portfolio && (
               <>
                 <Card sx={{ height: "100%" }}>
-                  <Grid container justifyContent="center">
+                 {/*  <Grid container justifyContent="center">
                     <MDBox display="flex">
                       <MDBox
                         display="flex"
@@ -131,7 +130,7 @@ const Portfolio = () => {
                         >
                           Edit portfolio name
                         </MDButton>
-                      </MDBox>
+                      </MDBox> 
                       <MDBox
                         display="flex"
                         justifyContent="space-between"
@@ -149,7 +148,7 @@ const Portfolio = () => {
                         </MDButton>
                       </MDBox>
                     </MDBox>
-                  </Grid>
+                  </Grid>*/}
 
                   <Holdings
                     holdings={displayObject}

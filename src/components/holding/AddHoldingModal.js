@@ -31,7 +31,7 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
         <Typography variant="h6" gutterBottom>
           Add Holding
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form>
           <TextField
             fullWidth
             variant="outlined"

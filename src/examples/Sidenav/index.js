@@ -33,7 +33,7 @@ function Sidenav({ color = "info", brand = "", brandName = "", routes = [], ...r
       let result =  logout();
       
       if (result.success) {
-        navigate("/authentication/sign-in");
+        navigate("/login");
       } else {
         alert("Login failed");
       }
@@ -162,7 +162,7 @@ function Sidenav({ color = "info", brand = "", brandName = "", routes = [], ...r
         <MDButton
           component="a"
           onClick={handleLogout}
-          to='/authentication/sign-in'
+          to='/login'
           target="_blank"
           rel="noreferrer"
           variant="gradient"

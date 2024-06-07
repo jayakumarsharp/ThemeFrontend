@@ -24,7 +24,7 @@ import MDButton from "components/MaterialTheme/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import bgImage from "assets/images/bg-sign-in-basic.jpg";
 
 import { useAuth } from "hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -131,7 +131,7 @@ function Basic() {
                 Don&apos;t have an account?{" "}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-up"
+                  to="/signup"
                   variant="button"
                   color="info"
                   fontWeight="medium"

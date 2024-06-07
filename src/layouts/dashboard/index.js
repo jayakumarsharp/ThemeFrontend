@@ -1,18 +1,14 @@
 import Grid from "@mui/material/Grid";
-
 // Material Dashboard 2 React components
 import MDBox from "components/MaterialTheme/MDBox";
-
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-
 import { useAuth } from "hooks/useAuth";
 import Quotes from "components/quote/Quotes";
 import TrendingSymbols from "components/home/TrendingSymbols";
 import PortfolioSummary from "components/home/PortfolioSummary";
-
 function Dashboard() {
   const { currentUser } = useAuth();
   console.log(currentUser);
@@ -53,5 +49,4 @@ function Dashboard() {
     </DashboardLayout>
   );
 }
-
 export default Dashboard;

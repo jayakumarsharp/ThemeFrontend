@@ -78,7 +78,7 @@ function Cover() {
               <MDTypography
                 component="a"
                 href="#"
-                variant="button"
+                variant="button" 
                 fontWeight="bold"
                 color="info"
                 textGradient
@@ -96,7 +96,7 @@ function Cover() {
                 Already have an account?{" "}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-in"
+                  to="/login"
                   variant="button"
                   color="info"
                   fontWeight="medium"
