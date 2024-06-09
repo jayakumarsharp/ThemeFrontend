@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3002";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3003/api";
 
 /** API Class.
  *
@@ -38,20 +38,22 @@ class PortfolioApi {
   /** Login user */
 
   static async login(data) {
-    let res = await this.request(`auth/token`, data, "post");
+    let res = await this.request(`users/token`, data, "post");
     return res.token;
   }
 
   /** Signup user */
 
   static async signup(data) {
-    let res = await this.request(`auth/register`, data, "post");
+
+    let res = await this.request(`users/register`, data, "post");
     return res.token;
   }
 
   /** Get user */
 
   static async getUser(username) {
+    debugger;
     let res = await this.request(`users/${username}/complete`);
     return res.user;
   }
@@ -91,7 +93,7 @@ class PortfolioApi {
 
   static async addHolding(data) {
     try {
-      let res = await this.request(`yhf/quote`, { symbols: data.symbol }, "post");
+      let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
       if (res?.quotes?.length > 0) {
         let { holding } = await this.request(`holdings`, data, 'post');
         return { success: true, holding };
@@ -134,28 +136,28 @@ class PortfolioApi {
   /**  External Yahoo Finance Data */
 
   static async getQuote(symbols) {
-    let res = await this.request(`yhf/quote`, symbols, "post");
+    let res = await this.request(`security/quote`, symbols, "post");
     return res.quotes;
   }
 
   static async getQuoteSummary(symbol) {
-    let res = await this.request(`yhf/quote-summary`, symbol, "post");
+    let res = await this.request(`security/quote-summary`, symbol, "post");
     return res.quote;
   }
 
   static async searchQuote(searchVal) {
-    let res = await this.request(`yhf/search`, { term: searchVal }, "get");
+    let res = await this.request(`security/search`, { term: searchVal }, "get");
     return res.results;
   }
 
   static async getTrendingSymbols() {
-    let res = await this.request(`yhf/trending`);
+    let res = await this.request(`security/trending`);
     return res;
   }
 
   static async getRecommendations(searchVal) {
     try {
-      let res = await this.request(`yhf/recommend`, { term: searchVal });
+      let res = await this.request(`security/recommend`, { term: searchVal });
       return { success: true, res };
     } catch (errors) {
       return { success: false, errors };
@@ -164,7 +166,7 @@ class PortfolioApi {
 
   static async getHistorical(chartParams) {
     try {
-      let res = await this.request(`yhf/historical`, chartParams);
+      let res = await this.request(`security/historical`, chartParams);
       return { success: true, res };
     } catch (errors) {
       return { success: false, errors };
