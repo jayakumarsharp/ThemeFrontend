@@ -21,9 +21,7 @@ class PortfolioApi {
     //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${PortfolioApi.token}` };
-    const params = (method === "get")
-      ? data
-      : {};
+    const params = method === "get" ? data : {};
     try {
       return (await axios({ url, method, data, params, headers })).data;
     } catch (err) {
@@ -45,7 +43,6 @@ class PortfolioApi {
   /** Signup user */
 
   static async signup(data) {
-
     let res = await this.request(`users/register`, data, "post");
     return res.token;
   }
@@ -61,8 +58,7 @@ class PortfolioApi {
   /** Update user */
 
   static async updateUser(username, data) {
-    if (data.password === '')
-      delete data.password;
+    if (data.password === "") delete data.password;
 
     let res = await this.request(`users/${username}`, data, "patch");
     return res.user;
@@ -71,21 +67,21 @@ class PortfolioApi {
   /** Create a portfolio */
 
   static async newPortfolio(data) {
-    let res = await this.request(`portfolios`, data, "post");
+    let res = await this.request(`portfolio/createPortfolio`, data, "post");
     return res.portfolio;
   }
 
   /** Update portfolio */
 
   static async updatePortfolio(id, data) {
-    let res = await this.request(`portfolios/${id}`, data, 'patch');
+    let res = await this.request(`portfolio/portfolios/${id}`, data, "patch");
     return { success: true, portfolio: res.portfolio };
   }
 
   /** Delete a portfolio */
 
   static async deletePortfolio(id) {
-    let res = await this.request(`portfolios/${id}`, {}, "delete");
+    let res = await this.request(`portfolio/portfolios/${id}`, {}, "delete");
     return res.deleted;
   }
 
@@ -95,29 +91,27 @@ class PortfolioApi {
     try {
       let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
       if (res?.quotes?.length > 0) {
-        let { holding } = await this.request(`holdings`, data, 'post');
+        let { holding } = await this.request(`holdings`, data, "post");
         return { success: true, holding };
       } else {
         return { success: false, errors: ["Invalid symbol"] };
       }
     } catch (errors) {
-      return { success: false, errors }
+      return { success: false, errors };
     }
-
-
   }
 
   /** Update a holding */
 
   static async updateHolding(id, data) {
-    let res = await this.request(`holdings/${id}`, data, 'patch');
+    let res = await this.request(`portfolio/holdings/${id}`, data, "patch");
     return { success: true, holding: res.holding };
   }
 
   /** Delete a holding */
 
   static async deleteHolding(id) {
-    let res = await this.request(`holdings/${id}`, {}, 'delete');
+    let res = await this.request(`portfolio/holdings/${id}`, {}, "delete");
     return res.deleted;
   }
 
@@ -168,6 +162,51 @@ class PortfolioApi {
     try {
       let res = await this.request(`security/historical`, chartParams);
       return { success: true, res };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
+  static async getSecurities() {
+    try {
+      let data = await this.request(`security/securities`);
+      return { success: true, data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
+  static async getchart(chartParams) {
+    try {
+      let data = await this.request(`security/getchart`, chartParams, "post");
+      return { success: true, data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+  static async quoteSummary(chartParams) {
+    try {
+      let data = await this.request(`security/quoteSummary`, chartParams, "post");
+      return { success: true, res: data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
+  static async fundamentalsTimeSeries(chartParams) {
+    try {
+      let data = await this.request(`security/fundamentalsTimeSeries`, chartParams, "post");
+      return { success: true, res: data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+  
+
+  static async security(chartParams) {
+    try {
+      let data = await this.request(`security/security`, chartParams, "post");
+      return { success: true, res: data };
     } catch (errors) {
       return { success: false, errors };
     }

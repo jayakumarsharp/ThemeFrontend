@@ -25,7 +25,9 @@ export function AuthProvider({ children }) {
             let { username } = jwt.decode(token);
             PortfolioApi.token = token;
             let currentUser = await PortfolioApi.getUser(username);
+            debugger
             setCurrentUser(currentUser);
+            console.log('current user',currentUser)
           } catch (errors) {
             setCurrentUser(null);
           }

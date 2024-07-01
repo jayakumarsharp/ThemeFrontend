@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios";
+import PortfolioApi from "../../api/api";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDButton from "components/MaterialTheme/MDButton";
@@ -21,7 +21,8 @@ const SecurityComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axiosClient.get("/securities");
+      const response = await PortfolioApi.getSecurities();
+      debugger;
       setRowData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -66,7 +67,6 @@ const SecurityComponent = () => {
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <Link className="symbolLink" to="/addsecurity">
           <Grid xs={3} container spacing={2}>
-
             <MDBox alignItems="right" pt={3} px={2} mb={2}>
               <MDButton variant="gradient" color="info" fullWidth>
                 Add New Security

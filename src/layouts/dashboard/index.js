@@ -20,7 +20,7 @@ function Dashboard() {
           <Grid item xs={12}>
             <h2>Summary</h2>
             {currentUser && <PortfolioSummary />}
-            <Grid>
+            {/* <Grid>
               <Quotes
                 label="US Markets"
                 symbols={["^GSPC", "^DJI", "^IXIC", "^RUT"]}
@@ -41,7 +41,7 @@ function Dashboard() {
                   showName={true}
                 />
               )}
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </MDBox>

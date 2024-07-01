@@ -18,7 +18,7 @@ import {
 
 const PortfolioSummary = () => {
   const { currentUser } = useAuth();
-
+  console.log('current user at tempalte',currentUser)
   return (
     <>
       <MDBox pt={6} pb={3}>
@@ -36,8 +36,9 @@ const PortfolioSummary = () => {
                   Portfolios
                 </MDTypography>
                 <MDTypography variant="h6" color="success" fontWeight="bold" textTransform="capitalize">
-                  {currentUser?.portfolios?.length ?? "0"} portfolios found for{" "}
-                  {currentUser?.username}
+                  
+                   {currentUser?.portfolios?.length ?? "0"} portfolios found for{" "}
+                  {currentUser?.portfolios.username} 
                 </MDTypography>
 
                 <Link className="symbolLink" to="/portfolio/add">
@@ -49,13 +50,13 @@ const PortfolioSummary = () => {
 
               {currentUser?.portfolios?.length
                 ? currentUser?.portfolios.map((p) => {
-                    const symbols = p.holdings.map((h) => h.symbol);
+                   // const symbols = p.holdings.map((h) => h.symbol);
                     return (
                       <Quotes
                         key={`p${p.id}`}
                         label={`${p.name}`}
                         headerLink={`/portfolio/${p.id}`}
-                        symbols={symbols}
+                        //symbols={symbols}
                         showSymbol={true}
                         showName={true}
                       />

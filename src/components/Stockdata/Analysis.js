@@ -1,9 +1,9 @@
-import React, { useState ,useContext} from "react";
-import axiosClient from "../axios";
+import React, { useState, useContext } from "react";
 import ChartComponent from "./ChartComponent";
 import DynamicTable from "./DynamicTable";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import PortfolioApi from "../../api/api";
 
 const AnalyticsComponent = () => {
   const [name, setName] = useState("");
@@ -20,27 +20,25 @@ const AnalyticsComponent = () => {
   const fetchData = async () => {
     try {
       console.log(searchQuery);
-      const response = await axiosClient.post("/getchart", {
-        name: searchQuery,
-      });
+      const response = await PortfolioApi.getchart({ name: searchQuery });
       console.log(response);
-      const quoteSummary = await axiosClient.post("/quoteSummary", {
+      const quoteSummary = await PortfolioApi.quoteSummary({
         name: searchQuery,
       });
       console.log(quoteSummary);
-      const fundamentalsTimeSeries = await axiosClient.post("/fundamentalsTimeSeries", {
-        name: searchQuery,
-      });
-      console.log(fundamentalsTimeSeries);
+      // const fundamentalsTimeSeries = await PortfolioApi.fundamentalsTimeSeries({
+      //   name: searchQuery,
+      // });
+      // console.log(fundamentalsTimeSeries);
 
-      const historical = await axiosClient.post("/historical", {
+      const historical = await PortfolioApi.getHistorical({
         name: searchQuery,
       });
       console.log(historical);
 
       // const jsonData = response.json();
       setData(response.data.quotes);
-      setjsonData(fundamentalsTimeSeries.data);
+      //setjsonData(fundamentalsTimeSeries.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -54,7 +52,7 @@ const AnalyticsComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosClient.post("/security", {
+      const response = await PortfolioApi.security({
         name: name,
         description,
         symbol,
