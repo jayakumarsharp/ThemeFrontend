@@ -74,7 +74,6 @@ const AnalyticsComponent = () => {
     <DashboardLayout>
       <DashboardNavbar />
       <div>
-        <h1>{searchQuery}</h1>
         <div>
           <input
             type="text"

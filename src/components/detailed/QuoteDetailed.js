@@ -42,9 +42,12 @@ const QuoteDetailed = () => {
   useEffect(() => {
     async function getQuoteSummary() {
       if (searchVal) {
+        debugger;
         const quoteSummary = await PortfolioApi.getQuoteSummary({ symbol: searchVal });
+        
         if (isMountedRef.current) {
           setQuoteSummary(quoteSummary);
+          console.log(quoteSummary);
         }
       }
     }

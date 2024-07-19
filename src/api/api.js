@@ -89,13 +89,14 @@ class PortfolioApi {
 
   static async addHolding(data) {
     try {
-      let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
-      if (res?.quotes?.length > 0) {
-        let { holding } = await this.request(`holdings`, data, "post");
-        return { success: true, holding };
-      } else {
-        return { success: false, errors: ["Invalid symbol"] };
-      }
+      debugger;
+      // let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
+      // if (res?.quotes?.length > 0) {
+      let { holding } = await this.request(`portfoliotransactions/createTransaction`, data, "post");
+      return { success: true, holding };
+      // } else {
+      //   return { success: false, errors: ["Invalid symbol"] };
+      // }
     } catch (errors) {
       return { success: false, errors };
     }
@@ -135,13 +136,13 @@ class PortfolioApi {
   }
 
   static async getQuoteSummary(symbol) {
-    let res = await this.request(`security/quote-summary`, symbol, "post");
-    return res.quote;
+    let res = await this.request(`security/quoteSummary`, symbol, "post");
+    return res;
   }
 
   static async searchQuote(searchVal) {
-    let res = await this.request(`security/search`, { term: searchVal }, "get");
-    return res.results;
+    let res = await this.request(`security/search`, searchVal, "post");
+    return res;
   }
 
   static async getTrendingSymbols() {
@@ -201,11 +202,25 @@ class PortfolioApi {
       return { success: false, errors };
     }
   }
-  
+
+  static async updatesecurity(item) {
+    let data = await this.request("security/updateSecuritydata", item, "post");
+    return { success: true, data };
+  }
 
   static async security(chartParams) {
     try {
       let data = await this.request(`security/security`, chartParams, "post");
+      return { success: true, data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
+  static async getpricehistoryforsecurity(chartParams) {
+    try {
+      console.log(chartParams);
+      let data = await this.request(`heatMap/getpricehistoryforsecurity`, chartParams, "post");
       return { success: true, res: data };
     } catch (errors) {
       return { success: false, errors };

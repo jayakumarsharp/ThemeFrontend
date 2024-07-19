@@ -11,6 +11,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDButton from "components/MaterialTheme/MDButton";
 import MDBox from "components/MaterialTheme/MDBox";
 import Grid from "@mui/material/Grid";
+import Dropdown from '../controlcomponent/securitydropdown';
+
+
 const SecurityComponent = () => {
   const [rowData, setRowData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
@@ -22,7 +25,6 @@ const SecurityComponent = () => {
   const fetchData = async () => {
     try {
       const response = await PortfolioApi.getSecurities();
-      debugger;
       setRowData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -74,6 +76,7 @@ const SecurityComponent = () => {
             </MDBox>
           </Grid>
         </Link>
+        
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}

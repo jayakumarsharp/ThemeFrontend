@@ -110,7 +110,7 @@ function Overview() {
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox p={2}>
+        {/* <MDBox p={2}>
           <Grid container spacing={6}>
             <Grid item xs={12} md={6} xl={3}>
               <DefaultProjectCard
@@ -193,7 +193,7 @@ function Overview() {
               />
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
       </Header>
       <Footer />
     </DashboardLayout>

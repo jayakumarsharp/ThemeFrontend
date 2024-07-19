@@ -33,7 +33,7 @@ const Holdings = ({ holdings, portfolio_id }) => {
       setRows(result.rows);
     }
   }, [holdings, isMountedRef]);
-  
+
   const handleEditHoldingPopup = (id) => {
     if (id) {
       setSelectedHolding(holdings.find((h) => h.id === id));
@@ -68,6 +68,7 @@ const Holdings = ({ holdings, portfolio_id }) => {
   const handleCloseAddHoldingModal = () => setShowAddHoldingModal(false);
   const handleAddHolding = async (data) => {
     try {
+      console.log(data);
       let holding = await PortfolioApi.addHolding(data);
       if (holding.success) {
         await refresh(currentUser.username);

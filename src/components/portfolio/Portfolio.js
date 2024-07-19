@@ -19,6 +19,7 @@ import MDButton from "components/MaterialTheme/MDButton";
 
 import MDBox from "components/MaterialTheme/MDBox";
 const Portfolio = () => {
+  debugger;
   const { currentUser, refresh } = useAuth();
   const { go } = useNavigate();
   const { id } = useParams();
@@ -26,9 +27,7 @@ const Portfolio = () => {
   const [holdings, setHoldings] = useState([]);
   const [totalValue, setTotalValue] = useState([]);
   const [displayObject, setDisplayObject] = useState([]);
-  const [portfolio, setPortfolio] = useState(
-    currentUser?.portfolios?.find((p) => p.id === Number(id))
-  );
+  const [portfolio, setPortfolio] = useState(currentUser?.portfolios?.find((p) => p._id === id));
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditNameModal, setShowEditNameModal] = useState(false);
   const [showEditCashModal, setShowEditCashModal] = useState(false);
@@ -39,47 +38,48 @@ const Portfolio = () => {
     }
   }, [portfolio]);
 
-  useEffect(() => {
-    async function getQuote() {
-      if (holdings && holdings.length > 0) {
-        const symbols = holdings.map((h) => h.symbol);
-        const data = await PortfolioApi.getQuote({ symbols });
-        setQuotes(data);
-      }
-    }
-    getQuote();
-  }, [holdings]);
+  // useEffect(() => {
+  //   async function getQuote() {
+  //     if (holdings && holdings.length > 0) {
+  //       const symbols = holdings.map((h) => h.symbol);
+  //       // const data = await PortfolioApi.getQuote({ symbols });
+  //       setQuotes([]);
+  //     }
+  //   }
+  //   getQuote();
+  // }, [holdings]);
 
   useEffect(() => {
-    if (quotes?.length && holdings?.length) {
+    if ( holdings?.length) {
       // console.log(quotes);
       // console.log(holdings);
+
       const combined = holdings.map((h) => {
-        let data = quotes.find((q) => q.symbol === h.symbol);
-        if (data) {
-          const {
-            symbol,
-            shortName,
-            regularMarketPrice,
-            regularMarketChange,
-            regularMarketChangePercent,
-          } = data;
-          let id = h.id;
-          let shares_owned = Number(h.shares_owned);
-          let price = regularMarketPrice;
-          let change = regularMarketChange;
-          let percent = regularMarketChangePercent;
-          let value = Number(shares_owned) * Number(price) ?? 0;
-          return { id, symbol, shortName, shares_owned, price, change, percent, value };
-        }
-        return null;
+        //let data = quotes.find((q) => q.symbol === h.symbol);
+        // if (data) {
+          console.log("h print", h);
+        let shortName = h.shortName;
+        let regularMarketPrice = h.regular_market_price;
+        let regularMarketChange = 0;
+        let regularMarketChangePercent = 0;
+
+        let symbol = h.symbol;
+        let id = h.id;
+        let shares_owned = Number(h.quantity);
+        let price = h.executed_price;
+        let change = regularMarketChange;
+        let percent = regularMarketChangePercent;
+        let value = Number(shares_owned) * Number(price) ?? 0;
+        return { id, symbol, shortName, shares_owned, price, change, percent, value };
+        // }
+        // return null;
       });
       // console.log(combined);
       const totalValue = combined.reduce((prev, next) => prev + (next?.value ?? 0), 0);
       setDisplayObject(combined);
       setTotalValue(Number(totalValue));
     }
-  }, [quotes, holdings, portfolio]);
+  }, [ holdings, portfolio]);
 
   const handleDeleteWarning = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -113,7 +113,7 @@ const Portfolio = () => {
             {portfolio && (
               <>
                 <Card sx={{ height: "100%" }}>
-                 {/*  <Grid container justifyContent="center">
+                  {/*  <Grid container justifyContent="center">
                     <MDBox display="flex">
                       <MDBox
                         display="flex"
@@ -153,7 +153,7 @@ const Portfolio = () => {
                   <Holdings
                     holdings={displayObject}
                     setHoldings={setHoldings}
-                    portfolio_id={portfolio?.id}
+                    portfolio_id={portfolio?._id}
                   />
                 </Card>
                 <Card sx={{ height: "100%" }}>

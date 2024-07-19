@@ -1,4 +1,4 @@
-import { Button, Modal,Box,TextField,Typography } from "@mui/material";
+import { Button, Modal, Box, TextField, Typography } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import Alert from "../common/Alert";
 
@@ -8,11 +8,12 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
       symbol: "",
       shares_owned: 0,
       portfolio_id: portfolio_id,
+      executed_price: 0,
+      tran_code: "by",
     },
-    handleAdd,
-    ``
+    handleAdd
   );
-  const { symbol, shares_owned } = formData;
+  const { symbol, shares_owned, executed_price, tran_code } = formData;
 
   const handleNumInput = (e) => {
     let t = e.target.value;
@@ -55,6 +56,19 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
             onChange={handleChange}
             sx={{ mb: 3 }}
           />
+          <TextField
+            fullWidth
+            variant="outlined"
+            type="number"
+            label="executed_price"
+            placeholder="executed_price"
+            name="executed_price"
+            value={executed_price}
+            onInput={handleNumInput}
+            onChange={handleChange}
+            sx={{ mb: 3 }}
+          />
+
           {formErrors.length ? (
             <Alert severity="error">
               {formErrors.map((error, index) => (
