@@ -44,10 +44,16 @@ const QuoteDetailed = () => {
       if (searchVal) {
         debugger;
         const quoteSummary = await PortfolioApi.getQuoteSummary({ symbol: searchVal });
+        // const fundamentalsTimeSeries = await PortfolioApi.fundamentalsTimeSeries({ symbol: searchVal });
+        // const quotesummarydetailed = await PortfolioApi.quotesummarydetailed({ symbol: searchVal });
+        
+        // console.log('fs',fundamentalsTimeSeries);
+        // console.log('qsd',quotesummarydetailed);
         
         if (isMountedRef.current) {
           setQuoteSummary(quoteSummary);
-          console.log(quoteSummary);
+          console.log('qs',quoteSummary);
+          
         }
       }
     }

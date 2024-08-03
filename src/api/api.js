@@ -50,7 +50,6 @@ class PortfolioApi {
   /** Get user */
 
   static async getUser(username) {
-    debugger;
     let res = await this.request(`users/${username}/complete`);
     return res.user;
   }
@@ -89,7 +88,6 @@ class PortfolioApi {
 
   static async addHolding(data) {
     try {
-      debugger;
       // let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
       // if (res?.quotes?.length > 0) {
       let { holding } = await this.request(`portfoliotransactions/createTransaction`, data, "post");
@@ -159,15 +157,6 @@ class PortfolioApi {
     }
   }
 
-  static async getHistorical(chartParams) {
-    try {
-      let res = await this.request(`security/historical`, chartParams);
-      return { success: true, res };
-    } catch (errors) {
-      return { success: false, errors };
-    }
-  }
-
   static async getSecurities() {
     try {
       let data = await this.request(`security/securities`);
@@ -185,18 +174,17 @@ class PortfolioApi {
       return { success: false, errors };
     }
   }
-  static async quoteSummary(chartParams) {
+  static async fundamentalsTimeSeries(chartParams) {
     try {
-      let data = await this.request(`security/quoteSummary`, chartParams, "post");
+      let data = await this.request(`security/fundamentalsTimeSeries`, chartParams, "post");
       return { success: true, res: data };
     } catch (errors) {
       return { success: false, errors };
     }
   }
-
-  static async fundamentalsTimeSeries(chartParams) {
+  static async quotesummarydetailed(chartParams) {
     try {
-      let data = await this.request(`security/fundamentalsTimeSeries`, chartParams, "post");
+      let data = await this.request(`security/quotesummarydetailed`, chartParams, "post");
       return { success: true, res: data };
     } catch (errors) {
       return { success: false, errors };
@@ -217,10 +205,26 @@ class PortfolioApi {
     }
   }
 
+  static async getHistorical(chartParams) {
+    try {
+      let res = await this.request(`security/historical`, chartParams, "post");
+      return { success: true, res };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
   static async getpricehistoryforsecurity(chartParams) {
     try {
-      console.log(chartParams);
       let data = await this.request(`heatMap/getpricehistoryforsecurity`, chartParams, "post");
+      return { success: true, res: data };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+  static async getATHpricelistbySymbol(chartParams) {
+    try {
+      let data = await this.request(`heatMap/getATHpricelistbySymbol`, chartParams, "post");
       return { success: true, res: data };
     } catch (errors) {
       return { success: false, errors };

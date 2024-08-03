@@ -53,7 +53,7 @@ import {
   setOpenConfigurator,
 } from "context";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -184,13 +184,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
     </AppBar>
   );
 }
-
-// Setting default values for the props of DashboardNavbar
-DashboardNavbar.defaultProps = {
-  absolute: false,
-  light: false,
-  isMini: false,
-};
 
 // Typechecking props for the DashboardNavbar
 DashboardNavbar.propTypes = {

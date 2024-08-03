@@ -44,10 +44,10 @@ function DataTableBodyCell({ noBorder, align, children }) {
 }
 
 // Setting default values for the props of DataTableBodyCell
-DataTableBodyCell.defaultProps = {
-  noBorder: false,
-  align: "left",
-};
+// DataTableBodyCell.defaultProps = {
+//   noBorder: false,
+//   align: "left",
+// };
 
 // Typechecking props for the DataTableBodyCell
 DataTableBodyCell.propTypes = {

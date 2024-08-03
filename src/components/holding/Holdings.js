@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Table } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import PortfolioApi from "../../api/api";
-import { toDecimalHundredths } from "../../helpers/formatter";
-import "./Holdings.css";
+import DataTable from "examples/Tables/DataTable";
 import EditHoldingModal from "./EditHoldingModal";
 import AddHoldingModal from "./AddHoldingModal";
-import { Button, Grid } from "@mui/material";
 import Holdingdata from "./holdingdata";
-import DataTable from "examples/Tables/DataTable";
 import MDBox from "components/MaterialTheme/MDBox";
 import MDButton from "components/MaterialTheme/MDButton";
-
+import Grid from "@mui/material/Grid";
 import useIsMountedRef from "../../hooks/useIsMountedRef";
+import "./Holdings.css";
 
 const Holdings = ({ holdings, portfolio_id }) => {
   const { currentUser, refresh } = useAuth();
-  const { go } = useNavigate();
+  const navigate = useNavigate();
   const [showEditHoldingModal, setShowEditHoldingModal] = useState(false);
   const [showAddHoldingModal, setShowAddHoldingModal] = useState(false);
   const [selectedHolding, setSelectedHolding] = useState(null);
@@ -28,7 +25,6 @@ const Holdings = ({ holdings, portfolio_id }) => {
   useEffect(() => {
     if (holdings.length > 0) {
       const result = Holdingdata({ holdings });
-      console.log(result);
       setColumns(result.columns);
       setRows(result.rows);
     }
@@ -50,17 +46,22 @@ const Holdings = ({ holdings, portfolio_id }) => {
     try {
       let updated = await PortfolioApi.updateHolding(selectedHolding.id, data);
       await refresh(currentUser.username);
-      go(`/portfolio/${portfolio_id}`);
+      navigate(`/portfolio/${portfolio_id}`);
     } catch (errors) {
+      console.error(errors);
       return { success: false, errors };
     }
   };
 
   const handleDeleteHolding = async (id) => {
-    let res = await PortfolioApi.deleteHolding(id);
-    if (res === Number(id)) {
-      await refresh(currentUser.username);
-      go(`/portfolio/${portfolio_id}`);
+    try {
+      let res = await PortfolioApi.deleteHolding(id);
+      if (res === Number(id)) {
+        await refresh(currentUser.username);
+        navigate(`/portfolio/${portfolio_id}`);
+      }
+    } catch (errors) {
+      console.error(errors);
     }
   };
 
@@ -68,35 +69,28 @@ const Holdings = ({ holdings, portfolio_id }) => {
   const handleCloseAddHoldingModal = () => setShowAddHoldingModal(false);
   const handleAddHolding = async (data) => {
     try {
-      console.log(data);
       let holding = await PortfolioApi.addHolding(data);
       if (holding.success) {
         await refresh(currentUser.username);
-        go(`/portfolio/${portfolio_id}`);
+        navigate(`/portfolio/${portfolio_id}`);
       } else {
         let { errors } = holding;
+        console.error(errors);
         return { success: false, errors };
       }
     } catch (errors) {
+      console.error(errors);
       return { success: false, errors };
     }
-  };
-
-  const marketChangeColor = (number) => {
-    if (number < 0) return "red";
-    else if (number > 0) return "green";
-    else return "black";
   };
 
   return (
     <>
       <Grid container justifyContent="center">
-        <MDBox display="flex">
-          <MDBox display="flex" justifyContent="space-between" alignItems="right" pt={3} px={2}>
-            <MDButton variant="gradient" color="success" onClick={handleAddHoldingPopup} fullWidth>
-              Add holding
-            </MDButton>
-          </MDBox>
+        <MDBox display="flex" justifyContent="space-between" alignItems="right" pt={3} px={2}>
+          <MDButton variant="gradient" color="success" onClick={handleAddHoldingPopup} fullWidth>
+            Add holding
+          </MDButton>
         </MDBox>
       </Grid>
 
@@ -110,7 +104,7 @@ const Holdings = ({ holdings, portfolio_id }) => {
         />
       </MDBox>
 
-      {selectedHolding ? (
+      {selectedHolding && (
         <EditHoldingModal
           showModal={showEditHoldingModal}
           handleClose={handleCloseEditHoldingModal}
@@ -119,9 +113,8 @@ const Holdings = ({ holdings, portfolio_id }) => {
           holding={selectedHolding}
           portfolio_id={portfolio_id}
         />
-      ) : (
-        ""
       )}
+      
       <AddHoldingModal
         showModal={showAddHoldingModal}
         handleClose={handleCloseAddHoldingModal}

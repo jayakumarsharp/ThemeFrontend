@@ -1,9 +1,27 @@
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Box, TextField, Typography } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import Alert from "../common/Alert";
+import Dropdown from "../controlcomponent/securitydropdown";
+import PortfolioApi from "../../api/api";
 
 const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) => {
-  const { formData, formErrors, formSuccess, handleChange, handleSubmit } = useForm(
+  const validateForm = (formData, setFormErrors) => {
+    const errors = [];
+    if (!formData.symbol) {
+      errors.push("Symbol is required.");
+    }
+    if (formData.shares_owned <= 0) {
+      errors.push("Shares owned must be greater than 0.");
+    }
+    if (formData.executed_price <= 0) {
+      errors.push("Executed price must be greater than 0.");
+    }
+    setFormErrors(errors);
+    return errors.length === 0;
+  };
+
+  const { formData, formErrors, formSuccess, handleChange, handleSubmit, setFormErrors } = useForm(
     {
       symbol: "",
       shares_owned: 0,
@@ -11,19 +29,38 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
       executed_price: 0,
       tran_code: "by",
     },
-    handleAdd
+    handleAdd,
+    validateForm
   );
+
   const { symbol, shares_owned, executed_price, tran_code } = formData;
+  const [secrowData, setSecrowData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const fetchSecData = async () => {
+    try {
+      const response = await PortfolioApi.getSecurities();
+      setSecrowData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSecData();
+  }, []);
 
   const handleNumInput = (e) => {
     let t = e.target.value;
     e.target.value =
       t.indexOf(".") >= 0 ? t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 5) : +t;
   };
+  
 
-  const handleSymbolInput = (e) => {
-    let t = e.target.value;
-    e.target.value = t.toUpperCase();
+  const handleSelectChange = (selected) => {
+    console.log("selected", selected);
+    setSelectedOption(selected);
+    handleChange({ target: { name: "symbol", value: selected.value } }); // Update formData symbol
   };
 
   return (
@@ -33,17 +70,7 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
           Add Holding
         </Typography>
         <form>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Symbol"
-            placeholder="Symbol"
-            name="symbol"
-            value={symbol}
-            onInput={handleSymbolInput}
-            onChange={handleChange}
-            sx={{ mb: 3 }}
-          />
+          <Dropdown options={secrowData} onSelectChange={handleSelectChange} />
           <TextField
             fullWidth
             variant="outlined"
@@ -60,8 +87,8 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
             fullWidth
             variant="outlined"
             type="number"
-            label="executed_price"
-            placeholder="executed_price"
+            label="Executed Price"
+            placeholder="Executed Price"
             name="executed_price"
             value={executed_price}
             onInput={handleNumInput}

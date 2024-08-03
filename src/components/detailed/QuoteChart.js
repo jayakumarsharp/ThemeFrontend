@@ -29,7 +29,7 @@ const QuoteChart = ({ symbol, eventKey }) => {
     async function getHistorical() {
       if (symbol && eventKey) {
         const { start, interval } = calculateStart(eventKey);
-        let results = await PortfolioApi.getHistorical({ term: symbol, start, interval });
+        let results = await PortfolioApi.getHistorical({ symbol: symbol });
         results?.success ? setResults(results.res) : setResults(null);
       }
     }
