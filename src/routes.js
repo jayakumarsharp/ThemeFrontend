@@ -74,6 +74,15 @@ const routes = [
 
  
  
+ 
+  {
+    type: "collapse",
+    name: "currency",
+    key: "currency",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/currency",
+    isProtected: true,
+  },
   {
     type: "collapse",
     name: "Profile",

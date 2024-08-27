@@ -1,58 +1,183 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import MDTypography from "components/MaterialTheme/MDTypography";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Collapse,
+  Typography,
+  Box,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import axios from "axios";
+import { debug } from "util";
 
-const Holdingdata = ({ holdings }) => {
-  const columns = [
-    { Header: "symbol", accessor: "symbol", width: "45%", align: "left" },
-    { Header: "Qty", accessor: "quantity", align: "center" },
-    { Header: "Avg Buy price", accessor: "average_buy_price", align: "center" },
-    { Header: "Invested", accessor: "total_invested", align: "center" },
-    { Header: "LTP", accessor: "regular_market_price", align: "center" },
-    { Header: "Current value", accessor: "today_value", align: "center" },
-    { Header: "Unrealized P&L(%)", accessor: "percent", align: "center" },
-  ];
-  const rows = holdings.map((item) => ({
-    symbol: (
-      <Link className="symbolLink" to={`/detailed?symbol=${item.symbol}`}>
-        <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-          {item.symbol}
-        </MDTypography>
-      </Link>
-    ),
-    quantity: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.quantity}
-      </MDTypography>
-    ),
-    average_buy_price: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.average_buy_price}
-      </MDTypography>
-    ),
-    total_invested: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.total_invested}
-      </MDTypography>
-    ),
-    today_value: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.today_value}
-      </MDTypography>
-    ),
-    percent: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.gain_loss_percent}
-      </MDTypography>
-    ),
-    regular_market_price: (
-      <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-        {item.regular_market_price}
-      </MDTypography>
-    ),
-  }));
+const Row = ({ row }) => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [details, setDetails] = useState(null);
 
-  return { columns, rows };
+
+  const handleExpandClick = async (rowData) => { // Pass rowData as argument
+    setOpen(!open);
+    debugger;
+    if (!open && rowData) {
+      setLoading(true);
+      try {
+        console.log(rowData)
+        // Assuming `PortfolioApi.getHoldingbypfandsecurity` fetches details based on row data
+        // const response = await PortfolioApi.getHoldingbypfandsecurity(rowData); // Use rowData
+        // setDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching details", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  return (
+    <>
+      <TableRow hover>
+        <TableCell align="right" >
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => handleExpandClick(row)} // Pass row data on click
+          >
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row" align="left">
+          <Typography variant="body2" fontWeight="bold">
+            {row.symbol}
+          </Typography>
+        </TableCell>
+        <TableCell align="right" >
+          <Typography variant="body2">{row.quantity}</Typography>
+        </TableCell>
+        <TableCell align="right" >
+          <Typography variant="body2">{row.average_buy_price}</Typography>
+        </TableCell>
+        <TableCell align="right"  >
+          <Typography variant="body2">{row.total_invested}</Typography>
+        </TableCell>
+        <TableCell align="right"  >
+          <Typography variant="body2">{row.regular_market_price}</Typography>
+        </TableCell>
+        <TableCell align="right"  >
+          <Typography variant="body2">{row.today_value}</Typography>
+        </TableCell>
+        <TableCell align="right" >
+          <Typography variant="body2">
+            {row.gain_loss_percent.toFixed(2)}%
+          </Typography>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={2}>
+              {loading ? (
+                <CircularProgress />
+              ) : details ? (
+                <>
+                  <Typography variant="subtitle1" gutterBottom component="div">
+                    Detailed Information
+                  </Typography>
+                  <Table size="small" aria-label="details">
+                    <TableBody>
+                      <TableRow>
+                        <TableCell component="th" scope="row">
+                          Executed Price
+                        </TableCell>
+                        <TableCell align="right">
+                          {details.executed_price}
+                        </TableCell>
+                      </TableRow>
+                      {/* Add more detailed rows dynamically as needed */}
+                      {details.other_data && details.other_data.map((detail, index) => (
+                        <TableRow key={index}>
+                          <TableCell component="th" scope="row">
+                            {detail.label}
+                          </TableCell>
+                          <TableCell align="right">
+                            {detail.value}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No details available
+                </Typography>
+              )}
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  );
 };
 
-export default Holdingdata;
+const HoldingTable = ({ holdings }) => {
+  return (
+    <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+      <Table aria-label="holding table">
+
+        <TableRow>
+          <TableCell padding="checkbox" sx={{ width: '5%' }} />
+          <TableCell align="left" sx={{ width: '20%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Symbol
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '10%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Qty
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '15%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Avg Buy Price
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '15%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Invested
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '15%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              LTP
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '10%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Current Value
+            </Typography>
+          </TableCell>
+          <TableCell align="right" sx={{ width: '10%' }}>
+            <Typography variant="subtitle2" color="textSecondary">
+              Unrealized P&L (%)
+            </Typography>
+          </TableCell>
+        </TableRow>
+
+        {holdings.map((holding) => (
+          <Row key={holding.symbol} row={holding} />
+        ))}
+
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default HoldingTable;

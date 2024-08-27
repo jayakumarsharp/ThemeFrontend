@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { Container, Grid, Button, TextField, Typography, Box } from "@mui/material";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import PortfolioApi from "../../api/api";
@@ -10,13 +10,14 @@ import Dropdown from "../controlcomponent/securitydropdown";
 
 const HeatMapComponent = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [secrowData, setsecrowData] = useState([]);
   const [rowData, setRowData] = useState([]);
-  const [gridApi, setGridApi] = useState(null);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [cagrData, setCagrData] = useState(null);
+		
+  const [gridApi, setGridApi] = useState(null);
+
   const fetchSecData = async () => {
     try {
       const response = await PortfolioApi.getSecurities();
@@ -31,7 +32,6 @@ const HeatMapComponent = () => {
   }, []);
 
   const handleSelectChange = (selected) => {
-    console.log("selected", selected);
     setSelectedOption(selected);
   };
 
@@ -42,42 +42,26 @@ const HeatMapComponent = () => {
         return;
       }
 
-      console.log("Selected Option:", selectedOption);
-
       const response = await PortfolioApi.getpricehistoryforsecurity({
         symbol: selectedOption.value,
         fromDate,
         toDate,
       });
 
-      console.log(response.res);
       setRowData(response.res.prices);
       setCagrData(response.res.cagr);
+
       const apiresponse = await PortfolioApi.getATHpricelistbySymbol({
         symbol: selectedOption.value,
         fromDate,
         toDate,
       });
-      console.log("getATHpricelistbySymbol", apiresponse);
     } else {
       alert("Please select an option.");
     }
   };
 
-  const months = [
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
+  const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
   const numberValueFormatter = (params) => {
     if (params.value !== undefined && params.value !== "NA") {
@@ -86,10 +70,12 @@ const HeatMapComponent = () => {
       return "NA";
     }
   };
+
   function formatCAGR(value, decimalPlaces = 2) {
     if (isNaN(value)) return "NA";
     return value.toFixed(decimalPlaces);
   }
+
   const growthCellStyle = (params) => {
     let value = parseFloat(params.value);
     let color = "lightgray";
@@ -100,10 +86,9 @@ const HeatMapComponent = () => {
         else if (value < -50) color = "darkred";
         else color = "#f29393";
       } else {
-        if (value > 25) color = "darkgreen"; // Dark green for growth > 25%
-        else if (value >= 15 && value <= 25)
-          color = "green"; // Normal green for growth between 15% to 25%
-        else color = "lightgreen"; // Light green for growth < 15%
+        if (value > 25) color = "darkgreen";
+        else if (value >= 15 && value <= 25) color = "green";
+        else color = "lightgreen";
       }
     }
 
@@ -169,37 +154,65 @@ const HeatMapComponent = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <div>
-        <div>
-          <label>From Date:</label>
-          <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
-          <label>To Date:</label>
-          <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
-        </div>
-        <Dropdown options={secrowData} onSelectChange={handleSelectChange} />
-        <button onClick={handleButtonClick}>Search</button>
-      </div>
-      <div className="ag-theme-alpine" style={{ width: "100%" }}>
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={columnDefs}
-          rowSelection="single"
-          suppressRowClickSelection={true}
-          domLayout="autoHeight"
-          onGridReady={onGridReady}
-        ></AgGridReact>
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={columnDefs1}
-          rowSelection="single"
-          suppressRowClickSelection={true}
-          domLayout="autoHeight"
-          onGridReady={onGridReady1}
-        ></AgGridReact>
-
+      <Container>
+        <Box mb={4}>
+          <Typography variant="h6" gutterBottom>
+            Select Date Range and Security
+          </Typography>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="From Date"
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="To Date"
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Dropdown options={secrowData} onSelectChange={handleSelectChange} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button variant="contained" color="primary" onClick={handleButtonClick}>
+                Search
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box mb={4}>
+          <div className="ag-theme-alpine" style={{ width: "100%" }}>
+            <AgGridReact
+              rowData={rowData}
+              columnDefs={columnDefs}
+              rowSelection="single"
+              suppressRowClickSelection={true}
+              domLayout="autoHeight"
+              onGridReady={onGridReady}
+            />
+            <AgGridReact
+              rowData={rowData}
+              columnDefs={columnDefs1}
+              rowSelection="single"
+              suppressRowClickSelection={true}
+              domLayout="autoHeight"
+              onGridReady={onGridReady1}
+            />
+          </div>
+        </Box>
         {cagrData ? (
-          <div>
-            <h2>CAGR Values</h2>
+          <Box mt={4}>
+            <Typography variant="h6">CAGR Values</Typography>
             <ul>
               <li>
                 <strong>CAGR 1 Year:</strong> {formatCAGR(cagrData.CAGR_1yr)}
@@ -214,11 +227,11 @@ const HeatMapComponent = () => {
                 <strong>CAGR 10 Year:</strong> {formatCAGR(cagrData.CAGR_10yr)}
               </li>
             </ul>
-          </div>
+          </Box>
         ) : (
-          <p>No CARG data found.</p>
+          <Typography variant="body1">No CAGR data found.</Typography>
         )}
-      </div>
+      </Container>
     </DashboardLayout>
   );
 };

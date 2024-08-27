@@ -37,6 +37,8 @@ import SearchResults from "components/search/SearchResults";
 import QuoteDetailed from "components/detailed/QuoteDetailed";
 import Portfolio from "components/portfolio/Portfolio";
 import LedgerNAV from "components/Ledgerdata/index";
+import CurrencyGrid from "components/currency/currencygrid";
+
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -170,7 +172,8 @@ export default function App() {
         <Route path="/page-with-tabs" element={<PageWithTabs />} />
         <Route path="/heatmap" element={<HeatMapComponent />} />
         <Route path="/ledgerNAV" element={<LedgerNAV />} />
-        {/* </Route> */}
+        <Route path="/currency" element={<CurrencyGrid />} />
+
       </Routes>
     </ThemeProvider>
   );

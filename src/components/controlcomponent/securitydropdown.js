@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import Select, { components } from 'react-select';
 import { FixedSizeList as List } from 'react-window';
+import './Dropdown.css';
 
 const Dropdown = ({ options, onSelectChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -14,15 +15,20 @@ const Dropdown = ({ options, onSelectChange }) => {
 
   const filterOption = (candidate, inputValue) => {
     const symbol = candidate.data.data.symbol.toLowerCase();
-    const longname = candidate.data.data.longname.toLowerCase();
+    const shortname = candidate.data.data.shortname.toLowerCase();
     const searchValue = inputValue.toLowerCase();
-    return symbol.includes(searchValue) || longname.includes(searchValue);
+    return symbol.includes(searchValue) || shortname.includes(searchValue);
   };
-
+  const truncateLabel = (label, maxLength) => {
+    if (label.length > maxLength) {
+      return `${label.slice(0, maxLength)}...`;
+    }
+    return label;
+  };
   const formattedOptions = useMemo(() =>
     options.map(option => ({
       value: option.symbol,
-      label: `${option.symbol} - ${option.longname}`,
+      label: truncateLabel(`${option.symbol} - ${option.shortname}`, 14),
       data: option
     })),
     [options]
@@ -49,9 +55,12 @@ const Dropdown = ({ options, onSelectChange }) => {
       onChange={handleChange}
       options={formattedOptions}
       filterOption={filterOption}
-      placeholder="Select a symbol or longname"
+      placeholder="Select a symbol or shortname"
       components={{ MenuList }}
+      className="custom-select"
+      classNamePrefix="custom"
     />
+
   );
 };
 

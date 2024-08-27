@@ -36,19 +36,7 @@ const Portfolio = () => {
   }, [portfolio]);
 
   useEffect(() => {
-    if (holdings?.length) {
-      const combined = holdings;
-      // .map((h) => {
-      //   let shortName = h.shortName;
-      //   let regularMarketPrice = h.regular_market_price;
-      //   let symbol = h.symbol;
-      //   let id = h.id;
-      //   let shares_owned = Number(h.quantity);
-      //   let price = h.executed_price;
-      //   let change = h.today_value;
-      //   let percent = h.gain_loss_percent;
-      //   return { id, symbol, shortName, shares_owned,average_buy_price, price, change, percent, regularMarketPrice };
-      // });
+    if (holdings?.length) {      
       const totalValue = holdings.reduce((prev, next) => prev + (next?.value ?? 0), 0);
       setDisplayObject(holdings);
       setTotalValue(Number(totalValue));

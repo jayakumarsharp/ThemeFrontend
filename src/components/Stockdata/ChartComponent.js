@@ -1,202 +1,76 @@
-import React, { useEffect, useState } from "react";
-import { format } from "d3-format";
-import { timeFormat } from "d3-time-format";
-import {
-  discontinuousTimeScaleProviderBuilder,
-  Chart,
-  ChartCanvas,
-  CurrentCoordinate,
-  BarSeries,
-  CandlestickSeries,
-  ElderRaySeries,
-  LineSeries,
-  MovingAverageTooltip,
-  OHLCTooltip,
-  SingleValueTooltip,
-  XAxis,
-  YAxis,
-  CrossHairCursor,
-  EdgeIndicator,
-  MouseCoordinateX,
-  MouseCoordinateY,
-  ZoomButtons,
-  ema,
-  elderRay,
-} from "react-financial-charts";
+import React from 'react';
+import { ChartCanvas, Chart } from 'react-stockcharts';
+import { LineSeries } from 'react-stockcharts/lib/series'; // Update import path based on actual library structure
+import { XAxis, YAxis } from 'react-stockcharts/lib/axes'; // Update import path based on actual library structure
+import { HoverTooltip } from 'react-stockcharts/lib/tooltip'; // Use HoverTooltip or another appropriate tooltip
+import { sma } from 'react-stockcharts/lib/indicator'; // Import sma function
+import { scaleLinear } from 'd3-scale';
+import { timeFormat } from 'd3-time-format';
 
-const ChartComponent = ({ initialData }) => {
-  const [data, setData] = useState([]);
-  const [ema12, setEma12] = useState(null);
-  const [ema26, setEma26] = useState(null);
-  const [elder, setElder] = useState(null);
+// Define moving average configuration if required
+const maConfig = {
+  windowSize: 20,
+  stroke: 'blue',
+};
 
-  useEffect(() => {
-    if (initialData && initialData.length > 0) {
-      const ema12Calc = ema()
-        .id(1)
-        .options({ windowSize: 12 })
-        .merge((d, c) => {
-          d.ema12 = c;
-        })
-        .accessor((d) => d.ema12);
+const StockChart = ({ data, width, height, theme, indicators }) => {
+  // Data preparation
+  const preparedData = data.map(item => ({
+    date: new Date(item.date),
+    close: item.close,
+    // Add other data points as needed
+  }));
 
-      const ema26Calc = ema()
-        .id(2)
-        .options({ windowSize: 26 })
-        .merge((d, c) => {
-          d.ema26 = c;
-        })
-        .accessor((d) => d.ema26);
+  // Calculate moving average
+  const movingAverage = sma()
+    .options({ windowSize: maConfig.windowSize })
+    .merge((d, c) => { d.movingAverage = c; })
+    .accessor(d => d.movingAverage)
+    .calculate(preparedData);
 
-      const elderCalc = elderRay();
+  // Scale configuration
+  const xScale = scaleLinear()
+    .domain([preparedData[0].date, preparedData[preparedData.length - 1].date])
+    .range([0, width]);
 
-      const calculatedData = elderCalc(ema26Calc(ema12Calc(initialData)));
-
-      setEma12(ema12Calc);
-      setEma26(ema26Calc);
-      setElder(elderCalc);
-      setData(calculatedData);
-    }
-  }, [initialData]);
-
-  if (!data || data.length === 0 || !ema12 || !ema26 || !elder) {
-    return <div>No data available</div>;
-  }
-
-  const ScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
-    (d) => new Date(d.date)
-  );
-  const height = 700;
-  const width = 900;
-  const margin = { left: 0, right: 48, top: 0, bottom: 24 };
-
-  const { data: finalData, xScale, xAccessor, displayXAccessor } = ScaleProvider(data);
-
-  const pricesDisplayFormat = format(".2f");
-  const max = xAccessor(finalData[finalData.length - 1]);
-  const min = xAccessor(finalData[Math.max(0, finalData.length - 100)]);
-  const xExtents = [min, max + 5];
-
-  const gridHeight = height - margin.top - margin.bottom;
-  const elderRayHeight = 100;
-  const elderRayOrigin = (_, h) => [0, h - elderRayHeight];
-  const barChartHeight = gridHeight / 4;
-  const barChartOrigin = (_, h) => [0, h - barChartHeight - elderRayHeight];
-  const chartHeight = gridHeight - elderRayHeight;
-  const yExtents = (data) => [data.high, data.low];
-  const dateTimeFormat = "%d %b";
-  const timeDisplayFormat = timeFormat(dateTimeFormat);
-  const barChartExtents = (data) => data.volume;
-  const candleChartExtents = (data) => [data.high, data.low];
-  const yEdgeIndicator = (data) => data.close;
-  const volumeColor = (data) =>
-    data.close > data.open ? "rgba(38, 166, 154, 0.3)" : "rgba(239, 83, 80, 0.3)";
-  const volumeSeries = (data) => data.volume;
-  const openCloseColor = (data) => (data.close > data.open ? "#26a69a" : "#ef5350");
+  const yScale = scaleLinear()
+    .domain([Math.min(...preparedData.map(d => d.close)), Math.max(...preparedData.map(d => d.close))])
+    .range([height, 0]);
 
   return (
     <ChartCanvas
-      height={height}
-      ratio={3}
       width={width}
-      margin={margin}
-      data={finalData}
-      displayXAccessor={displayXAccessor}
-      seriesName="Data"
+      height={height}
+      margin={{ left: 60, right: 20, top: 20, bottom: 30 }}
       xScale={xScale}
-      xAccessor={xAccessor}
-      xExtents={xExtents}
+      yScale={yScale}
+      seriesName="Stock Data"
+      data={preparedData}
+      xAccessor={d => d.date}
+      yAccessor={d => d.close}
     >
-      <Chart id={2} height={barChartHeight} origin={barChartOrigin} yExtents={barChartExtents}>
-        <BarSeries fillStyle={volumeColor} yAccessor={volumeSeries} />
-      </Chart>
-      <Chart id={3} height={chartHeight} yExtents={candleChartExtents}>
-        <XAxis showGridLines showTickLabel={false} />
-        <YAxis showGridLines tickFormat={pricesDisplayFormat} />
-        <CandlestickSeries />
-        <LineSeries yAccessor={ema26.accessor()} strokeStyle={ema26.stroke()} />
-        <CurrentCoordinate yAccessor={ema26.accessor()} fillStyle={ema26.stroke()} />
-        <LineSeries yAccessor={ema12.accessor()} strokeStyle={ema12.stroke()} />
-        <CurrentCoordinate yAccessor={ema12.accessor()} fillStyle={ema12.stroke()} />
-        <MouseCoordinateY rectWidth={margin.right} displayFormat={pricesDisplayFormat} />
-        <EdgeIndicator
-          itemType="last"
-          rectWidth={margin.right}
-          fill={openCloseColor}
-          lineStroke={openCloseColor}
-          displayFormat={pricesDisplayFormat}
-          yAccessor={yEdgeIndicator}
-        />
-        <MovingAverageTooltip
-          origin={[8, 24]}
-          options={[
-            {
-              yAccessor: ema26.accessor(),
-              type: "EMA",
-              stroke: ema26.stroke(),
-              windowSize: ema26.options().windowSize,
-            },
-            {
-              yAccessor: ema12.accessor(),
-              type: "EMA",
-              stroke: ema12.stroke(),
-              windowSize: ema12.options().windowSize,
-            },
-          ]}
-        />
-        <ZoomButtons />
-        <OHLCTooltip origin={[8, 16]} />
-      </Chart>
       <Chart
-        id={4}
-        height={elderRayHeight}
-        yExtents={[0, elder.accessor()]}
-        origin={elderRayOrigin}
-        padding={{ top: 8, bottom: 8 }}
+        id={0}
+        yExtents={[d => d.close, d => d.movingAverage]}
       >
-        <XAxis showGridLines gridLinesStrokeStyle="#e0e3eb" />
-        <YAxis
-          ticks={4}
-          tickFormat={pricesDisplayFormat}
-          tickStroke="#000000"
-          gridLinesStrokeStyle="#e0e3eb"
+        <XAxis axisAt="bottom" orient="bottom" tickFormat={timeFormat('%Y-%m-%d')} />
+        <YAxis axisAt="left" orient="left" />
+        <LineSeries
+          yAccessor={d => d.close}
+          stroke="blue"
         />
-        <ElderRaySeries yAccessor={elder.accessor()} />
-        <SingleValueTooltip
-          yAccessor={elder.accessor()}
-          yLabel="Elder Ray"
-          yDisplayFormat={pricesDisplayFormat}
-          origin={[8, 16]}
+        <LineSeries
+          yAccessor={d => d.movingAverage}
+          stroke={maConfig.stroke}
         />
+        {/* {indicators.map((indicator, index) => {
+          const IndicatorComponent = indicator.type;
+          return <IndicatorComponent key={index} {...indicator} data={preparedData} />;
+        })} */}
+        <HoverTooltip />
       </Chart>
-      <CrossHairCursor />
     </ChartCanvas>
   );
 };
 
-export default ChartComponent;
-
-
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import ChartComponent from "./ChartComponent";
-
-// const apiResponse = [
-//   {
-//     adjclose: 82.86478424072266,
-//     close: 83.9000015258789,
-//     date: "2023-04-11T03:45:00.000Z",
-//     high: 85.69999694824219,
-//     low: 81,
-//     open: 81,
-//     volume: 199204
-//   }
-//   // Add more data points as needed
-// ];
-
-// const priceData = apiResponse.map(item => [new Date(item.date).getTime(), item.close]);
-
-// ReactDOM.render(
-//   <ChartComponent priceData={priceData} />,
-//   document.getElementById("root")
-// );
+export default StockChart;

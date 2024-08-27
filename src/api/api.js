@@ -2,20 +2,12 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3003/api";
 
-/** API Class.
- *
- * Static class tying together methods used to get/send to to the API.
- * There shouldn't be any frontend-specific stuff here, and there shouldn't
- * be any API-aware stuff elsewhere in the frontend.
- *
- */
-
 class PortfolioApi {
   // the token for interactive with the API will be stored here.
   static token;
 
   static async request(endpoint, data = {}, method = "get") {
-    console.debug("API Call:", endpoint, data, method);
+    console.log("API Call:", endpoint, data, method);
 
     //there are multiple ways to pass an authorization token, this is how you pass it in the header.
     //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
@@ -90,8 +82,23 @@ class PortfolioApi {
     try {
       // let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
       // if (res?.quotes?.length > 0) {
-      let { holding } = await this.request(`portfoliotransactions/createTransaction`, data, "post");
+      let  holding  = await this.request(`portfoliotransactions/createTransaction`, data, "post");
       return { success: true, holding };
+      // } else {
+      //   return { success: false, errors: ["Invalid symbol"] };
+      // }
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  }
+
+
+  static async getHoldingbypfandsecurity(data) {
+    try {
+      // let res = await this.request(`security/quote`, { symbols: data.symbol }, "post");
+      // if (res?.quotes?.length > 0) {
+      let  transactions  = await this.request(`portfoliotransactions/getHoldingbypfandsecurity`, data, "post");
+      return { success: true, transactions };
       // } else {
       //   return { success: false, errors: ["Invalid symbol"] };
       // }
@@ -230,6 +237,34 @@ class PortfolioApi {
       return { success: false, errors };
     }
   }
+
+//currency
+
+  /** Delete a currencies */
+
+  static async deletecurrencies(id) {
+    let data = await this.request(`currency/currencies/${id}`, {}, "delete");
+    return { success: true, data };
+  }
+
+  /** update currencies */
+  static async updatecurrencies(id, currencies) {
+    let data = await this.request(`currency/currencies/${id}`, currencies, "put");
+    return { success: true, data };
+  }
+
+  /**  Add currencies*/
+
+  static async addcurrencies(currencies) {
+    let data = await this.request(`currency/currencies`, currencies, "post");
+    return { success: true, data };
+  }
+  static async getcurrencies() {
+    let data= await this.request(`currency/currencies`);
+    return { success: true, data };
+  }
+
+
 }
 
 export default PortfolioApi;

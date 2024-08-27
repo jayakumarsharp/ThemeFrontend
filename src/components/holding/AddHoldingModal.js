@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Box, TextField, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import Alert from "../common/Alert";
 import Dropdown from "../controlcomponent/securitydropdown";
 import PortfolioApi from "../../api/api";
 
-const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) => {
+const AddHoldingDialog = ({ showDialog, handleClose, handleAdd, portfolio_id }) => {
   const validateForm = (formData, setFormErrors) => {
     const errors = [];
     if (!formData.symbol) {
@@ -55,7 +55,6 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
     e.target.value =
       t.indexOf(".") >= 0 ? t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 5) : +t;
   };
-  
 
   const handleSelectChange = (selected) => {
     console.log("selected", selected);
@@ -64,11 +63,9 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
   };
 
   return (
-    <Modal open={showModal} onClose={handleClose}>
-      <Box sx={{ width: 400, bgcolor: "background.paper", p: 4, borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Add Holding
-        </Typography>
+    <Dialog open={showDialog} onClose={handleClose} maxWidth="sm" fullWidth>
+      <DialogTitle>Add Holding</DialogTitle>
+      <DialogContent>
         <form>
           <Dropdown options={secrowData} onSelectChange={handleSelectChange} />
           <TextField
@@ -108,18 +105,18 @@ const AddHoldingModal = ({ showModal, handleClose, handleAdd, portfolio_id }) =>
               <div>Updated successfully.</div>
             </Alert>
           ) : null}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Button type="submit" variant="contained" onClick={handleSubmit} color="primary">
-              Add
-            </Button>
-            <Button onClick={handleClose} variant="outlined" color="secondary">
-              Cancel
-            </Button>
-          </Box>
         </form>
-      </Box>
-    </Modal>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleSubmit} variant="contained" color="primary">
+          Add
+        </Button>
+        <Button onClick={handleClose} variant="outlined" color="secondary">
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
-export default AddHoldingModal;
+export default AddHoldingDialog;
