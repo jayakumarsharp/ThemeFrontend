@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import PortfolioApi from "../../api/api";
+
 import {
   Table,
   TableBody,
@@ -25,14 +27,14 @@ const Row = ({ row }) => {
 
   const handleExpandClick = async (rowData) => { // Pass rowData as argument
     setOpen(!open);
-    debugger;
     if (!open && rowData) {
       setLoading(true);
       try {
         console.log(rowData)
         // Assuming `PortfolioApi.getHoldingbypfandsecurity` fetches details based on row data
-        // const response = await PortfolioApi.getHoldingbypfandsecurity(rowData); // Use rowData
-        // setDetails(response.data);
+        const response = await PortfolioApi.getHoldingbypfandsecurity(rowData); // Use rowData
+        console.log(response);
+        setDetails(response.transactions);
       } catch (error) {
         console.error("Error fetching details", error);
       } finally {
@@ -87,31 +89,24 @@ const Row = ({ row }) => {
                 <CircularProgress />
               ) : details ? (
                 <>
-                  <Typography variant="subtitle1" gutterBottom component="div">
-                    Detailed Information
-                  </Typography>
                   <Table size="small" aria-label="details">
-                    <TableBody>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          Executed Price
-                        </TableCell>
-                        <TableCell align="right">
-                          {details.executed_price}
-                        </TableCell>
+                    <TableRow>
+                      <TableCell>Symbol</TableCell>
+                      <TableCell>Shares Owned</TableCell>
+                      <TableCell>Transaction Code</TableCell>
+                      <TableCell>Executed Price</TableCell>
+                      <TableCell>Created At</TableCell>
+                    </TableRow>
+
+                    {details.map((detail, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{detail.symbol}</TableCell>
+                        <TableCell>{detail.shares_owned}</TableCell>
+                        <TableCell>{detail.tran_code}</TableCell>
+                        <TableCell>{detail.executed_price}</TableCell>
+                        <TableCell>{new Date(detail.createdAt).toLocaleString()}</TableCell>
                       </TableRow>
-                      {/* Add more detailed rows dynamically as needed */}
-                      {details.other_data && details.other_data.map((detail, index) => (
-                        <TableRow key={index}>
-                          <TableCell component="th" scope="row">
-                            {detail.label}
-                          </TableCell>
-                          <TableCell align="right">
-                            {detail.value}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
+                    ))}
                   </Table>
                 </>
               ) : (

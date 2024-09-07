@@ -1,9 +1,32 @@
+// import React, { useState, useEffect } from "react";
+//  <Select 
+//               fullWidth
+//               variant="outlined"
+//               label="Transaction Code"
+//               value={formData.tran_code}
+//               placeholder="Transaction Type"
+//               onChange={(event) =>
+//                 handleChange({ target: { name: "tran_code", value: event.target.value } })
+//               }
+//               name="tran_code"
+//               sx={{ mb: 3 }}
+//             >
+//               {trancodeData.map((option) => (
+//                 <MenuItem key={option.value} value={option.value}>
+//                   {option.label}
+//                 </MenuItem>
+//               ))}
+//             </Select>
+
+
+
+
+
 import React, { useState, useMemo } from 'react';
 import Select, { components } from 'react-select';
 import { FixedSizeList as List } from 'react-window';
-import './Dropdown.css';
 
-const Dropdown = ({ options, onSelectChange }) => {
+const Chinnu = ({ options, onSelectChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (selected) => {
@@ -64,4 +87,4 @@ const Dropdown = ({ options, onSelectChange }) => {
   );
 };
 
-export default Dropdown;
+export default Chinnu;

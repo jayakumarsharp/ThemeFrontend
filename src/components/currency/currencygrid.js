@@ -19,9 +19,7 @@ const CurrencyGrid = () => {
     }, []);
 
     const fetchCurrencies = async () => {
-        debugger;
         const response = await PortfolioApi.getcurrencies();
-        debugger;
         setCurrencies(response.data);
     };
 

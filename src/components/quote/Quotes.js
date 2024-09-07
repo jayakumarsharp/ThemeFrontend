@@ -20,7 +20,6 @@ const Quotes = ({ label, headerLink, symbols, showSymbol, showName }) => {
 
   useEffect(() => {
     async function getQuotes() {
-      debugger;
       if (symbols && symbols.length > 0) {
         console.log("symbosl", symbols);
         const data =[];// await PortfolioApi.getQuote({ symbols });

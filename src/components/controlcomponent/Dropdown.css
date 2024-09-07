@@ -43,4 +43,10 @@
   .custom-select__placeholder {
     color: #999; /* Placeholder text color */
   }
-  
+  .MuiAutocomplete-popper {
+    z-index: 1300 !important;
+  }
+  .chinnu{
+    margin-bottom:20px;
+    z-index: 999;
+  }

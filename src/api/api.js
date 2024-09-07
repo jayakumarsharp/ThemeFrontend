@@ -84,9 +84,7 @@ class PortfolioApi {
       // if (res?.quotes?.length > 0) {
       let  holding  = await this.request(`portfoliotransactions/createTransaction`, data, "post");
       return { success: true, holding };
-      // } else {
-      //   return { success: false, errors: ["Invalid symbol"] };
-      // }
+    
     } catch (errors) {
       return { success: false, errors };
     }
@@ -264,7 +262,10 @@ class PortfolioApi {
     return { success: true, data };
   }
 
-
+  static async getAllTrancodes() {
+    let data= await this.request(`currency/getAllTrancodes`);
+    return { success: true, data };
+  }
 }
 
 export default PortfolioApi;

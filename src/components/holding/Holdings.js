@@ -1,130 +1,186 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Grid,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
+
 import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "../../hooks/useForm";
 import PortfolioApi from "../../api/api";
-//import DataTable from "examples/Tables/DataTable";
-import EditHoldingModal from "./EditHoldingModal";
-import AddHoldingDialog from "./AddHoldingModal";
-
-//import Holdingdata from "./holdingdata";
-
 import HoldingTable from "./holdingdata";
 import MDBox from "components/MaterialTheme/MDBox";
 import MDButton from "components/MaterialTheme/MDButton";
-import Grid from "@mui/material/Grid";
-import useIsMountedRef from "../../hooks/useIsMountedRef";
+import Alert from "../common/Alert";
+import Dropdown from "../controlcomponent/securitydropdown";
 import "./Holdings.css";
+import zIndex from "@mui/material/styles/zIndex";
+import Chinnu from "./Chinnu";
 
 const Holdings = ({ holdings, portfolio_id }) => {
   const { currentUser, refresh } = useAuth();
   const navigate = useNavigate();
-  const [showEditHoldingModal, setShowEditHoldingModal] = useState(false);
   const [showAddHoldingDialog, setShowAddHoldingDialog] = useState(false);
-  const [selectedHolding, setSelectedHolding] = useState(null);
-  const [columns, setColumns] = useState([]);
-  const [rows, setRows] = useState([]);
-  const isMountedRef = useIsMountedRef();
+  const [secrowData, setSecrowData] = useState([]);
+  const [trancodeData, setTrancodeData] = useState([]);
 
-  // useEffect(() => {
-  //   if (holdings.length > 0) {
-  //     const result = Holdingdata({ holdings });
-  //     setColumns(result.columns);
-  //     setRows(result.rows);
-  //   }
-  // }, [holdings, isMountedRef]);
-
-  const handleEditHoldingPopup = (id) => {
-    if (id) {
-      setSelectedHolding(holdings.find((h) => h.id === id));
-      setShowEditHoldingModal(true);
-    }
-  };
-
-  const handleCloseEditHoldingModal = () => {
-    setSelectedHolding(null);
-    setShowEditHoldingModal(false);
-  };
-
-  const handleEditHolding = async (data) => {
-    try {
-      let updated = await PortfolioApi.updateHolding(selectedHolding.id, data);
-      await refresh(currentUser.username);
-      navigate(`/portfolio/${portfolio_id}`);
-    } catch (errors) {
-      console.error(errors);
-      return { success: false, errors };
-    }
-  };
-
-  const handleDeleteHolding = async (id) => {
-    try {
-      let res = await PortfolioApi.deleteHolding(id);
-      if (res === Number(id)) {
-        await refresh(currentUser.username);
-        navigate(`/portfolio/${portfolio_id}`);
-      }
-    } catch (errors) {
-      console.error(errors);
-    }
-  };
-
-  const handleAddHoldingPopup = () => setShowAddHoldingDialog(true);
-  const handleCloseAddHoldingDialog = () => setShowAddHoldingDialog(false);
+  const handleDialogToggle = () => setShowAddHoldingDialog((prev) => !prev);
+  
   const handleAddHolding = async (data) => {
     try {
-      let holding = await PortfolioApi.addHolding(data);
+      const holding = await PortfolioApi.addHolding(data);
       if (holding.success) {
         await refresh(currentUser.username);
-        navigate(`/portfolio/${portfolio_id}`);
+        return { success: true, errors: [] };
       } else {
-        let { errors } = holding;
-        console.error(errors);
-        return { success: false, errors };
+        console.error(holding.errors);
+        return { success: false, errors: holding.errors };
       }
     } catch (errors) {
       console.error(errors);
       return { success: false, errors };
     }
   };
+  
+
+  const validateForm = (formData, setFormErrors) => {
+    const errors = [];
+    if (!formData.symbol) errors.push("Symbol is required.");
+    if (formData.shares_owned <= 0) errors.push("Shares owned must be greater than 0.");
+    if (formData.executed_price <= 0) errors.push("Executed price must be greater than 0.");
+    if (!formData.tran_code) errors.push("Transaction type is required.");
+    setFormErrors(errors);
+    return errors.length === 0;
+  };
+
+  const { formData, formErrors, formSuccess, handleChange, handleSubmit } = useForm(
+    {
+      symbol: "",
+      shares_owned: 0,
+      portfolio_id,
+      executed_price: 0,
+      tran_code: "",
+    },
+    handleAddHolding,
+    validateForm
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const secResponse = await PortfolioApi.getSecurities();
+        setSecrowData(secResponse.data);
+
+        const tranResponse = await PortfolioApi.getAllTrancodes();
+        const trancodeOptions = tranResponse.data.map(({ trantype, desc }) => ({
+          value: trantype,
+          label: desc,
+        }));
+        setTrancodeData(trancodeOptions);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
       <Grid container justifyContent="center">
         <MDBox display="flex" justifyContent="space-between" alignItems="right" pt={3} px={2}>
-          <MDButton variant="gradient" color="success" onClick={handleAddHoldingPopup} fullWidth>
+          <MDButton variant="gradient" color="success" onClick={handleDialogToggle} fullWidth>
             Add holding
           </MDButton>
         </MDBox>
       </Grid>
 
       <MDBox pt={3}>
-      <HoldingTable holdings={holdings} />
-        {/* <DataTable
-          table={{ columns, rows }}
-          isSorted={false}
-          entriesPerPage={false}
-          showTotalEntries={false}
-          noEndBorder
-        /> */}
+        <HoldingTable holdings={holdings} />
       </MDBox>
 
-      {selectedHolding && (
-        <EditHoldingModal
-          showModal={showEditHoldingModal}
-          handleClose={handleCloseEditHoldingModal}
-          handleEdit={handleEditHolding}
-          handleDelete={handleDeleteHolding}
-          holding={selectedHolding}
-          portfolio_id={portfolio_id}
-        />
-      )}
+      <Dialog open={showAddHoldingDialog} onClose={handleDialogToggle} maxWidth="sm" fullWidth>
+        <DialogTitle>Add Holding</DialogTitle>
+        <DialogContent>
+          <form>
+            <Dropdown 
+              options={secrowData}
+              onSelectChange={(selected) =>
+                handleChange({ target: { name: "symbol", value: selected.value } })
+              }
+              style={{ maxHeight: '200px', overflowY: 'auto', zIndex:"100"}}
+              />
+             
 
-      <AddHoldingDialog
-        showDialog={showAddHoldingDialog}
-        handleClose={handleCloseAddHoldingDialog}
-        handleAdd={handleAddHolding}
-        portfolio_id={portfolio_id}
-      />
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="number"
+              label="Shares owned"
+              name="shares_owned"
+              value={formData.shares_owned}
+              onChange={handleChange}
+              sx={{ mb: 3 }}
+            />
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="number"
+              label="Executed Price"
+              name="executed_price"
+              value={formData.executed_price}
+              onChange={handleChange}
+              sx={{ mb: 3 }}
+            />
+            <Typography variant="body2" gutterBottom>
+              Transaction Type
+            </Typography>
+            <Select style={{height:"45px"}}
+              fullWidth
+              variant="outlined"
+              value={formData.tran_code}
+              onChange={(event) =>
+                handleChange({ target: { name: "tran_code", value: event.target.value } })
+              }
+              name="tran_code"
+              sx={{ mb: 3 }}
+            >
+              {trancodeData.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {formErrors.length > 0 && (
+              <Alert severity="error">
+                {formErrors.map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </Alert>
+            )}
+            {formSuccess && (
+              <Alert severity="success">
+                <div>Updated successfully.</div>
+              </Alert>
+            )}
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            <p style={{color:"#fff"}}>Add</p>
+          </Button>
+          <Button onClick={handleDialogToggle} variant="outlined" color="secondary">
+            <p style={{color:"#000"}}>Cancel</p>
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

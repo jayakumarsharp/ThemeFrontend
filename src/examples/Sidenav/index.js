@@ -29,9 +29,7 @@ function Sidenav({ color = "info", brand = "", brandName = "", routes = [], ...r
   const navigate = useNavigate();
   const handleLogout =  () => {
     try {
-      debugger
       let result =  logout();
-      
       if (result.success) {
         navigate("/login");
       } else {

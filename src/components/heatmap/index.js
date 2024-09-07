@@ -154,7 +154,7 @@ const HeatMapComponent = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Container>
+   
         <Box mb={4}>
           <Typography variant="h6" gutterBottom>
             Select Date Range and Security
@@ -231,7 +231,6 @@ const HeatMapComponent = () => {
         ) : (
           <Typography variant="body1">No CAGR data found.</Typography>
         )}
-      </Container>
     </DashboardLayout>
   );
 };

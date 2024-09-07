@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useIsMountedRef from "./useIsMountedRef";
 
-function useForm(initialState = {}, onSubmit, location) {
+function useForm(initialState = {}, onSubmit, validateForm) {
   const [formData, setFormData] = useState(initialState);
   const [formErrors, setFormErrors] = useState([]);
   const [formSuccess, setFormSuccess] = useState(false);
@@ -19,15 +19,16 @@ function useForm(initialState = {}, onSubmit, location) {
   };
 
   const handleSubmit = async (e) => {
-    debugger;
     e.preventDefault();
-    let result = await onSubmit?.(formData);
+    const isValid = validateForm(formData, setFormErrors);
+    if (!isValid) return;
+
+    const result = await onSubmit?.(formData);
     if (result.success) {
       if (isMountedRef.current) {
         setFormSuccess(true);
+        navigate(result.redirectUrl || '/');  // navigate to the URL returned by handleAddHolding
       }
-      console.log(location);
-      location && navigate(location);
     } else {
       if (isMountedRef.current) {
         setFormErrors(result.errors);
@@ -38,5 +39,4 @@ function useForm(initialState = {}, onSubmit, location) {
 
   return { formData, formErrors, formSuccess, handleChange, handleSubmit };
 }
-
 export { useForm };
